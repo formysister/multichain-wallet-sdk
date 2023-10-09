@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES5",
+    "lib": ["DOM", "ES5"],
+    "declaration": true,
+    "outDir": "dist",
+    "strict": true,
+    "allowJs": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "rootDir": "src",
+    "paths": {
+      "*": ["src/*", "node_modules/*"],
+    },
+    "esModuleInterop": true,
+    "sourceMap": false
+  },
+  "include": ["src/**/*", "decs.d.ts"],
+}
+// {
+//   "compilerOptions": {
+//     "module": "esnext",
+//     "target": "es2020",
+//     "strict": true,
+//     "sourceMap": true,
+//     "outDir": "dist",
+//     "baseUrl": ".",
+//     "moduleResolution": "node",
+//     "paths": {
+//       "*": ["src/*", "node_modules/*"]
+//     }
+//   },
+//   "include": ["src/**/*"]
+// }
