@@ -14,6 +14,7 @@ export const LITECOIN_DEFAULT: string = "m/44'/2'/0'/0";
 
 // Ethereum Contract Data
 export const ERC721_INTERFACE_ID = '0x80ac58cd';
+export const ERC1155_INTERFACE_ID = '0xd9b67a26'
 
 // Solana network cluster
 export const MAINNET_BETA: string = 'mainnet-beta';

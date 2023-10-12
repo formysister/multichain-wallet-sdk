@@ -23,7 +23,9 @@ import {
     APPROVE_TOKEN,
     TRANSFER_TOKEN,
     GET_GAS,
-    ETHER_GASSTATION_API
+    ETHER_GASSTATION_API,
+    ERC721_INTERFACE_ID,
+    ERC1155_INTERFACE_ID
 } from '../../utils/constant';
 // import ineterface
 import { AnyObject } from '../../utils/globalType';
@@ -34,8 +36,7 @@ import {
     isNftContract
 } from '../../helper/ethereumHelper';
 // import ABI
-import ERC20 from '../../abi/erc20';
-import ERC721 from '../../abi/erc721';
+import { erc20ABI, ecr721ABI, erc1155ABI } from '../../abi'
 
 import { weiToEther, gweiToEther, gweiToWei } from '../../utils/utils';
 
@@ -54,7 +55,7 @@ class EthereumWallet {
         })
     }
 
-    createWallet = async (derivationPath?: string, nonce?: number) => {
+    createWallet = (derivationPath?: string, nonce?: number) => {
         const path = derivationPath || ETHEREUM_DEFAULT;
         const index = nonce || Math.floor(Math.random() * 10);
     
@@ -70,7 +71,7 @@ class EthereumWallet {
         return response
     }
 
-    importWallet = async (mnemonic: string, nonce?: number, derivationPath?: string) => {
+    importWallet = (mnemonic: string, nonce?: number, derivationPath?: string) => {
         const path = derivationPath || ETHEREUM_DEFAULT;
     
         const index = nonce || 0;
@@ -88,25 +89,35 @@ class EthereumWallet {
     }
 
     createMasterSeedFromMnemonic = async (mnemonic: string) => {
-        const seed = await mnemonicToSeed(mnemonic);
-        return seed;
+        try {
+            const seed = await mnemonicToSeed(mnemonic);
+            return seed;
+        }
+        catch(error) {
+            throw error
+        }
     }
 
     createAccount = async (rootKey: any, nonce: number) => {
-        const hdWallet = await hdkey.fromMasterSeed(rootKey);
-        const wallet = hdWallet.derivePath(ETHEREUM_DEFAULT + nonce).getWallet();
-        const address = `0x${wallet.getAddress().toString('hex')}`;
-        const privateKey = wallet.getPrivateKey().toString('hex');
+        try {
+            const hdWallet = await hdkey.fromMasterSeed(rootKey);
+            const wallet = hdWallet.derivePath(ETHEREUM_DEFAULT + nonce).getWallet();
+            const address = `0x${wallet.getAddress().toString('hex')}`;
+            const privateKey = wallet.getPrivateKey().toString('hex');
+        
+            const response: EvmAccount = {
+                address: address,
+                privateKey: privateKey
+            };
     
-        const response: EvmAccount = {
-            address: address,
-            privateKey: privateKey
-        };
-
-        return response
+            return response
+        }
+        catch(error) {
+            throw error
+        }
     }
 
-    importAccount = async (privateKey: string) => {
+    importAccount = (privateKey: string) => {
         const account = new ethers.Wallet(privateKey);
     
         const response: EvmAccount =  {
@@ -115,6 +126,110 @@ class EthereumWallet {
         }
 
         return response
+    }
+
+    getBalance = async (address: string) => {
+        const balance = await this.provider.getBalance(address);
+        return balance
+    }
+
+    getToken = async (tokenAddress: string, address?: string) => {
+        const isContract = await this.isContractAddress(tokenAddress);
+        var contract: ethers.Contract;
+    
+        if (!isContract) {
+            return false;
+        } else {
+            contract = new ethers.Contract(tokenAddress, erc20ABI, this.provider);
+
+            try {
+                const [name, symbol, decimals, totalSupply, balance] = await Promise.all([
+                    contract.name(),
+                    contract.symbol(),
+                    contract.decimals(),
+                    contract.totalSupply(),
+                    contract.balanceOf(address) || 0
+                ]);
+
+                return {
+                    name: name,
+                    symbol: symbol,
+                    decimals: decimals,
+                    totalSupply: totalSupply,
+                    balance: balance
+                }
+            } catch (error) {
+                throw error
+            }
+        }
+    }
+
+
+    /* util function  */
+
+    isContractAddress = async (address: string) => {
+        try {
+            const code = await this.provider.getCode(address);
+            if (code !== '0x')
+                return true;
+            else
+                return false;
+        } catch {
+            return false;
+        }
+    }
+
+    isNftContract = async (address: string) => {
+
+        let isNFT: boolean
+        let tokenType: ERCTokenType
+
+        try {
+            const isERC721NFT = await this.isERC721NFT(address)
+            const isERC1155NFT = await this.isERC1155NFT(address)
+
+            if(isERC721NFT) {
+                isNFT = true
+                tokenType = 'ERC721'
+            }
+            else if(isERC1155NFT) {
+                isNFT = true
+                tokenType = 'ERC1155'
+            }
+            else {
+                isNFT = false
+                tokenType = 'ERC1155'
+            }
+
+            return { isNFT, tokenType }
+        }
+        catch(error) {
+            throw error
+        }
+    }
+
+    isERC721NFT = async (address: string) => {
+        const contract = new ethers.Contract(address, ecr721ABI, this.provider)
+
+        try {
+            const is721NFT = await contract.supportsInterface(ERC721_INTERFACE_ID);
+            if(is721NFT) return true
+            else return false
+        } catch {
+            return false;
+        }
+    }
+
+    isERC1155NFT = async (address: string) => {
+        const contract = new ethers.Contract(address, erc1155ABI, this.provider)
+
+        try {
+            const is1155NFT = await contract.supportsInterface(ERC1155_INTERFACE_ID);
+            if(is1155NFT) return true
+            else return false
+        } catch {
+            return false;
+        }
     }
 }
 
