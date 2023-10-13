@@ -10,7 +10,12 @@ type EvmAccount = {
     privateKey: string
 }
 
-type ERCTokenType = 'ERC20' | 'ERC721' | 'ERC1155'
+type ERCTokenType = 'ERC20' | 'ERC721' | 'ERC1155' | undefined
+
+type IsNFT = {
+    isNFT: boolean,
+    tokenType: ERCTokenType
+}
 
 type EvmTokenDetail = {
     name: string,

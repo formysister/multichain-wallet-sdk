@@ -55,40 +55,54 @@ class EthereumWallet {
         })
     }
 
-    createWallet = (derivationPath?: string, nonce?: number) => {
+    /**
+     * 
+     * @param derivationPath 
+     * @param nonce 
+     * @returns {EvmWallet}
+     */
+    createWallet = (derivationPath?: string, nonce?: number): EvmWallet => {
         const path = derivationPath || ETHEREUM_DEFAULT;
         const index = nonce || Math.floor(Math.random() * 10);
     
         const wallet = ethers.Wallet.createRandom({ path: path + index });
     
-        const response: EvmWallet = {
+        return {
             address: wallet.address,
             privateKey: wallet.privateKey,
             mnemonic: wallet.mnemonic.phrase,
             nonce: index
         }
-
-        return response
     }
 
-    importWallet = (mnemonic: string, nonce?: number, derivationPath?: string) => {
+    /**
+     * 
+     * @param mnemonic 
+     * @param nonce 
+     * @param derivationPath 
+     * @returns {EvmWallet}
+     */
+    importWallet = (mnemonic: string, nonce?: number, derivationPath?: string): EvmWallet => {
         const path = derivationPath || ETHEREUM_DEFAULT;
     
         const index = nonce || 0;
     
         const wallet = ethers.Wallet.fromMnemonic(mnemonic, path + index);
     
-        const response: EvmWallet = {
+        return {
             address: wallet.address,
             privateKey: wallet.privateKey,
             mnemonic: wallet.mnemonic.phrase,
             nonce: index
         }
-
-        return response
     }
 
-    createMasterSeedFromMnemonic = async (mnemonic: string) => {
+    /**
+     * 
+     * @param mnemonic 
+     * @returns {Buffer}
+     */
+    createMasterSeedFromMnemonic = async (mnemonic: string): Promise<Buffer> => {
         try {
             const seed = await mnemonicToSeed(mnemonic);
             return seed;
@@ -98,76 +112,166 @@ class EthereumWallet {
         }
     }
 
-    createAccount = async (rootKey: any, nonce: number) => {
+    /**
+     * 
+     * @param rootKey 
+     * @param nonce 
+     * @returns {EvmAccount}
+     */
+    createAccount = async (rootKey: any, nonce: number): Promise<EvmAccount> => {
         try {
             const hdWallet = await hdkey.fromMasterSeed(rootKey);
             const wallet = hdWallet.derivePath(ETHEREUM_DEFAULT + nonce).getWallet();
             const address = `0x${wallet.getAddress().toString('hex')}`;
             const privateKey = wallet.getPrivateKey().toString('hex');
         
-            const response: EvmAccount = {
+            return {
                 address: address,
                 privateKey: privateKey
             };
-    
-            return response
         }
         catch(error) {
             throw error
         }
     }
 
-    importAccount = (privateKey: string) => {
+    /**
+     * 
+     * @param privateKey 
+     * @returns {EvmAccount}
+     */
+    importAccount = (privateKey: string): EvmAccount => {
         const account = new ethers.Wallet(privateKey);
     
-        const response: EvmAccount =  {
+        return {
             address: account.address,
             privateKey: account.privateKey
         }
-
-        return response
     }
 
-    getBalance = async (address: string) => {
+    /**
+     * 
+     * @param address 
+     * @returns {ethers.BigNumber}
+     */
+    getBalance = async (address: string): Promise<ethers.BigNumber> => {
         const balance = await this.provider.getBalance(address);
         return balance
     }
 
-    getToken = async (tokenAddress: string, address?: string) => {
-        const isContract = await this.isContractAddress(tokenAddress);
-        var contract: ethers.Contract;
+    /**
+     * 
+     * @param tokenAddress 
+     * @param address 
+     * @param tokenId 
+     * @returns {EvmTokenDetail}
+     */
+    getToken = async (tokenAddress: string, address?: string, tokenId?: number): Promise<EvmTokenDetail> => {
+        const isContract = await this.isContractAddress(tokenAddress)
+        let contract: ethers.Contract
+        let tokenDetail: EvmTokenDetail
     
         if (!isContract) {
-            return false;
-        } else {
-            contract = new ethers.Contract(tokenAddress, erc20ABI, this.provider);
-
-            try {
-                const [name, symbol, decimals, totalSupply, balance] = await Promise.all([
-                    contract.name(),
-                    contract.symbol(),
-                    contract.decimals(),
-                    contract.totalSupply(),
-                    contract.balanceOf(address) || 0
-                ]);
-
-                return {
-                    name: name,
-                    symbol: symbol,
-                    decimals: decimals,
-                    totalSupply: totalSupply,
-                    balance: balance
-                }
-            } catch (error) {
-                throw error
+            tokenDetail = {
+                name: '',
+                symbol: '',
+                decimals: 0,
+                totalSupply: 0,
+                balance: 0,
+                isNft: false,
+                tokenType: undefined
             }
         }
-    }
+        else {
+            const isNFT = await this.isNftContract(tokenAddress)
+            if(isNFT.tokenType === 'ERC721') {
+                contract = new ethers.Contract(tokenAddress, ecr721ABI, this.provider)
 
+                try {
+                    const [name, symbol, decimals, totalSupply, balance] = await Promise.all([
+                        contract.name(),
+                        contract.symbol(),
+                        contract.decimals(),
+                        contract.totalSupply(),
+                        address ? contract.balanceOf(address) : () =>  { return 0 }
+                    ]);
+    
+                    tokenDetail = {
+                        name: name,
+                        symbol: symbol,
+                        decimals: decimals,
+                        totalSupply: totalSupply,
+                        balance: balance,
+                        isNft: isNFT.isNFT,
+                        tokenType: isNFT.tokenType
+                    }
+                } catch (error) {
+                    throw error
+                }
+            }
+            else if (isNFT.tokenType === 'ERC1155') {
+                contract = new ethers.Contract(tokenAddress, erc1155ABI, this.provider)
+
+                try {
+                    const [name, symbol, decimals, totalSupply, balance] = await Promise.all([
+                        contract.name(),
+                        contract.symbol(),
+                        contract.decimals(),
+                        contract.totalSupply(),
+                        address && tokenId ? contract.balanceOf(address, tokenId) : () =>  { return 0 }
+                    ]);
+    
+                    tokenDetail = {
+                        name: name,
+                        symbol: symbol,
+                        decimals: decimals,
+                        totalSupply: totalSupply,
+                        balance: balance,
+                        isNft: isNFT.isNFT,
+                        tokenType: isNFT.tokenType
+                    }
+                } catch (error) {
+                    throw error
+                }
+            }
+            else {
+                contract = new ethers.Contract(tokenAddress, erc20ABI, this.provider)
+    
+                try {
+                    const [name, symbol, decimals, totalSupply, balance] = await Promise.all([
+                        contract.name(),
+                        contract.symbol(),
+                        contract.decimals(),
+                        contract.totalSupply(),
+                        address ? contract.balanceOf(address) : () =>  { return 0 }
+                    ]);
+    
+                    tokenDetail = {
+                        name: name,
+                        symbol: symbol,
+                        decimals: decimals,
+                        totalSupply: totalSupply,
+                        balance: balance,
+                        isNft: isNFT.isNFT,
+                        tokenType: isNFT.tokenType
+                    }
+                } catch (error) {
+                    throw error
+                }
+            }
+        }
+
+        return tokenDetail
+    }
 
     /* util function  */
 
-    isContractAddress = async (address: string) => {
+    /**
+     * 
+     * @param address 
+     * @returns {Boolean}
+     */
+    isContractAddress = async (address: string): Promise<boolean> => {
         try {
             const code = await this.provider.getCode(address);
             if (code !== '0x')
@@ -179,7 +283,12 @@ class EthereumWallet {
         }
     }
 
-    isNftContract = async (address: string) => {
+    /**
+     * 
+     * @param address 
+     * @returns {IsNFT}
+     */
+    isNftContract = async (address: string): Promise<IsNFT> => {
 
         let isNFT: boolean
         let tokenType: ERCTokenType
@@ -198,7 +307,7 @@ class EthereumWallet {
             }
             else {
                 isNFT = false
-                tokenType = 'ERC1155'
+                tokenType = 'ERC20'
             }
 
             return { isNFT, tokenType }
@@ -208,7 +317,12 @@ class EthereumWallet {
         }
     }
 
-    isERC721NFT = async (address: string) => {
+    /**
+     * 
+     * @param address 
+     * @returns {Boolean}
+     */
+    isERC721NFT = async (address: string): Promise<boolean> => {
         const contract = new ethers.Contract(address, ecr721ABI, this.provider)
 
         try {
@@ -220,7 +334,12 @@ class EthereumWallet {
         }
     }
 
-    isERC1155NFT = async (address: string) => {
+    /**
+     * 
+     * @param address 
+     * @returns {Boolean}
+     */
+    isERC1155NFT = async (address: string): Promise<boolean> => {
         const contract = new ethers.Contract(address, erc1155ABI, this.provider)
 
         try {
