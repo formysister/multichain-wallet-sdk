@@ -1,7 +1,7 @@
 /* eslint-disable */
 import axios from 'axios';
 
-import { ethers } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { hdkey } from 'ethereumjs-wallet';
 import { mnemonicToSeed } from 'bip39';
 
@@ -42,10 +42,14 @@ import { weiToEther, gweiToEther, gweiToWei } from '../../utils/utils';
 
 class EthereumWallet {
     
-    provider: ethers.providers.JsonRpcProvider;
-    chainId: number = 0;
+    provider: ethers.providers.JsonRpcProvider
+    chainId: number = 0
 
-    constructor(rpcUrl: string) {
+    privateKey: string
+    address: string
+    signer: ethers.Wallet
+
+    constructor(rpcUrl: string, privateKey?: string) {
         this.provider = new ethers.providers.JsonRpcProvider(rpcUrl)
         
         this.provider.getNetwork().then(network => {
@@ -53,6 +57,18 @@ class EthereumWallet {
         }).catch(() => {
             this.chainId = 0
         })
+
+        if(privateKey) {
+            this.signer = new ethers.Wallet(privateKey, this.provider)
+            this.privateKey = privateKey
+            this.address = this.signer.address
+        }
+        else {
+            const _tempWallet = this.createWallet()
+            this.signer = new ethers.Wallet(_tempWallet.privateKey, this.provider)
+            this.privateKey = _tempWallet.privateKey
+            this.address = _tempWallet.address
+        }
     }
 
     /**
@@ -154,8 +170,8 @@ class EthereumWallet {
      * @param address 
      * @returns {ethers.BigNumber}
      */
-    getBalance = async (address: string): Promise<ethers.BigNumber> => {
-        const balance = await this.provider.getBalance(address);
+    getBalance = async (address?: string): Promise<BigNumber> => {
+        const balance = await this.provider.getBalance(address || this.address);
         return balance
     }
 
@@ -193,7 +209,7 @@ class EthereumWallet {
                         contract.symbol(),
                         contract.decimals(),
                         contract.totalSupply(),
-                        address ? contract.balanceOf(address) : () =>  { return 0 }
+                        contract.balanceOf(address || this.address)
                     ]);
     
                     tokenDetail = {
@@ -218,7 +234,7 @@ class EthereumWallet {
                         contract.symbol(),
                         contract.decimals(),
                         contract.totalSupply(),
-                        address && tokenId ? contract.balanceOf(address, tokenId) : () =>  { return 0 }
+                        tokenId ? contract.balanceOf(address || this.address, tokenId) : () =>  { return 0 }
                     ]);
     
                     tokenDetail = {
@@ -243,7 +259,7 @@ class EthereumWallet {
                         contract.symbol(),
                         contract.decimals(),
                         contract.totalSupply(),
-                        address ? contract.balanceOf(address) : () =>  { return 0 }
+                        contract.balanceOf(address || this.address)
                     ]);
     
                     tokenDetail = {
@@ -262,6 +278,55 @@ class EthereumWallet {
         }
 
         return tokenDetail
+    }
+
+    /**
+     * 
+     * @param tokenAddress 
+     * @param address 
+     * @returns {BigNumber}
+     */
+    getTokenBalance = async (tokenAddress: string, address?: string): Promise<BigNumber> => {
+        try {
+            const contract = new ethers.Contract(tokenAddress, erc20ABI, this.provider);
+    
+            const balance = await contract.balanceOf(address || this.address)
+    
+            return balance
+        }
+        catch (error) {
+            throw error
+        }
+    }
+
+    sendEther = async (receiveAddress: string, amount: string, gasPrice?: any, gasLimit?: any): Promise<string> => {
+        try {
+            let tx;
+
+            if(gasPrice && gasLimit) {
+                tx = await this.signer.sendTransaction({
+                    to: receiveAddress,
+                    value: ethers.utils.parseUnits(amount),
+                    gasPrice,
+                    gasLimit
+                })
+
+                await tx.wait()
+            }
+            else {
+                tx = await this.signer.sendTransaction({
+                    to: receiveAddress,
+                    value: ethers.utils.parseEther(amount),
+                })
+
+                await tx.wait()
+            }
+
+            return tx.hash;
+        }
+        catch (error) {
+            throw error
+        }
     }
 
     /* util function  */
