@@ -299,9 +299,17 @@ class EthereumWallet {
         }
     }
 
-    sendEther = async (receiveAddress: string, amount: string, gasPrice?: any, gasLimit?: any): Promise<string> => {
+    /**
+     * 
+     * @param receiveAddress 
+     * @param amount 
+     * @param gasPrice 
+     * @param gasLimit 
+     * @returns {ethers.Transaction}
+     */
+    sendEther = async (receiveAddress: string, amount: string, gasPrice?: any, gasLimit?: any): Promise<ethers.Transaction> => {
         try {
-            let tx;
+            let tx: ethers.Transaction;
 
             if(gasPrice && gasLimit) {
                 tx = await this.signer.sendTransaction({
@@ -310,21 +318,71 @@ class EthereumWallet {
                     gasPrice,
                     gasLimit
                 })
-
-                await tx.wait()
             }
             else {
                 tx = await this.signer.sendTransaction({
                     to: receiveAddress,
                     value: ethers.utils.parseEther(amount),
                 })
-
-                await tx.wait()
             }
 
-            return tx.hash;
+            return tx;
         }
         catch (error) {
+            throw error
+        }
+    }
+
+    /**
+     * 
+     * @param tokenAddress 
+     * @param receiveAddress 
+     * @param amount 
+     * @param gasPrice 
+     * @param gasLimit 
+     * @returns {ethers.Transaction}
+     */
+    tokenApprove = async (tokenAddress: string, amount: string, receiveAddress: string, gasPrice?: any, gasLimit?: any): Promise<ethers.Transaction> => {
+        const contract = new ethers.Contract(tokenAddress, erc20ABI, this.signer);
+    
+        try {
+            let tx: ethers.Transaction;
+    
+            if(gasPrice && gasLimit) {
+                tx = await contract.approve(receiveAddress, amount, { gasPrice: gasPrice, gasLimit: gasLimit });
+            }
+            else {
+                tx = await contract.approve(receiveAddress, amount);
+            }
+    
+            return tx
+        } catch (error) {
+            throw error
+        }
+    }
+
+    /**
+     * 
+     * @param tokenAddress 
+     * @param amount 
+     * @param receiveAddress 
+     * @param gasPrice 
+     * @param gasLimit 
+     * @returns {ethers.Transaction}
+     */
+    tokenTransfer = async (tokenAddress: string, amount: any, receiveAddress: string, gasPrice?: any, gasLimit?: any): Promise<ethers.Transaction> => {
+        const contract = new ethers.Contract(tokenAddress, erc20ABI, this.signer);
+    
+        try {
+            let tx: ethers.Transaction;
+            if(gasPrice && gasLimit) {
+                tx = await contract.transfer(receiveAddress, amount, { gasPrice, gasLimit });
+            }
+            else {
+                tx = await contract.transfer(receiveAddress, amount);
+            }
+            return tx
+        } catch (error) {
             throw error
         }
     }
