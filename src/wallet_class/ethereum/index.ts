@@ -1,54 +1,39 @@
 /* eslint-disable */
-import axios from 'axios';
 
-import { BigNumber, ethers } from 'ethers';
+import { BigNumber, Contract, ContractInterface, ethers } from 'ethers';
 import { hdkey } from 'ethereumjs-wallet';
 import { mnemonicToSeed } from 'bip39';
 
-// import response format
-import { response, walletResponse, balanceResponse } from '../../utils/response';
 // import constants
 import { ETHEREUM_DEFAULT } from '../../utils/constant';
 // import actions
 import {
-    CREATE_WALLET,
-    IMPORT_WALLET,
-    CREATE_MASTERSEED,
-    CREATE_ACCOUNT,
-    IMPORT_ACCOUNT,
-    GET_BALANCE,
-    GET_TOKEN_BALANCE,
-    GET_TOKEN,
-    SEND_COIN,
-    APPROVE_TOKEN,
-    TRANSFER_TOKEN,
-    GET_GAS,
-    ETHER_GASSTATION_API,
     ERC721_INTERFACE_ID,
     ERC1155_INTERFACE_ID
 } from '../../utils/constant';
-// import ineterface
-import { AnyObject } from '../../utils/globalType';
-import { GasEstimationPayload } from 'utils/payloads/ethereum';
-// import util functions
-import {
-    isContractAddress,
-    isNftContract
-} from '../../helper/ethereumHelper';
 // import ABI
 import { erc20ABI, ecr721ABI, erc1155ABI } from '../../abi'
-
-import { weiToEther, gweiToEther, gweiToWei } from '../../utils/utils';
+import Util from '../../util_class/ethereum';
 
 class EthereumWallet {
     
-    provider: ethers.providers.JsonRpcProvider
+    // Network data
+    provider: ethers.providers.JsonRpcProvider | ethers.providers.Web3Provider
     chainId: number = 0
 
+    // Wallet main data
     privateKey: string
     address: string
     signer: ethers.Wallet
 
+    // Utility helper library
+    Util: Util = Util
+
+    /**
+     * 
+     * @param rpcUrl 
+     * @param privateKey 
+     */
     constructor(rpcUrl: string, privateKey?: string) {
         this.provider = new ethers.providers.JsonRpcProvider(rpcUrl)
         
@@ -168,7 +153,7 @@ class EthereumWallet {
     /**
      * 
      * @param address 
-     * @returns {ethers.BigNumber}
+     * @returns {BigNumber}
      */
     getBalance = async (address?: string): Promise<BigNumber> => {
         const balance = await this.provider.getBalance(address || this.address);
@@ -472,6 +457,18 @@ class EthereumWallet {
         } catch {
             return false;
         }
+    }
+
+    /**
+     * 
+     * @param address 
+     * @param abi 
+     * @returns {Contract}
+     */
+    getContract = (address: string, abi: ContractInterface): Contract => {
+        const contract = new ethers.Contract(address, abi, this.provider)
+
+        return contract
     }
 }
 
