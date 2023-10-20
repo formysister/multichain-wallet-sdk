@@ -64,5 +64,39 @@ describe("Wallet Test", () => {
             expect(typeof addressBalance).toBe('object')
             expect(typeof selfBalance).toBe('object')
         })
+
+        it("getToken()", () => {})
+
+        it("getTokenBalance()", () => {})
+
+        it("sendEther()", () => {})
+
+        it("tokenApprove()", () => {})
+
+        it("tokenTransfer()", () => {})
+
+        it("isContractAddress()", async () => {
+            const isContractAddress_true = await ethereumWallet.isContractAddress(SAMPLE_DATA.ETHEREUM.SAMPLE_TOKEN_ADDRESS)
+            const isContractAddress_false = await ethereumWallet.isContractAddress(SAMPLE_DATA.ETHEREUM.ZERO_ADDRESS)
+
+            expect(isContractAddress_true).toBe(true)
+            expect(isContractAddress_false).toBe(false)
+        })
+
+        it("isERC721NFT()", async () => {
+            const isERC721NFT_true = await ethereumWallet.isERC721NFT(SAMPLE_DATA.ETHEREUM.SAMPLE_721_NFT_ADDRESS)
+            const isERC721NFT_false = await ethereumWallet.isERC721NFT(SAMPLE_DATA.ETHEREUM.SAMPLE_1155_NFT_ADDRESS)
+
+            expect(isERC721NFT_true).toBe(true)
+            expect(isERC721NFT_false).toBe(false)
+        })
+
+        it("isERC1155NFT()", async () => {
+            const isERC1155NFT_true = await ethereumWallet.isERC1155NFT(SAMPLE_DATA.ETHEREUM.SAMPLE_1155_NFT_ADDRESS)
+            const isERC1155NFT_false = await ethereumWallet.isERC1155NFT(SAMPLE_DATA.ETHEREUM.SAMPLE_721_NFT_ADDRESS)
+
+            expect(isERC1155NFT_true).toBe(true)
+            expect(isERC1155NFT_false).toBe(false)
+        })
     })
 })

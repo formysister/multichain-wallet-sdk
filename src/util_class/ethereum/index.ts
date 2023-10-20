@@ -86,6 +86,7 @@ class Util {
     static getJsonRPCLatency = async (rpcURL: string): Promise<number> => {
         try {
             const provider = new ethers.providers.JsonRpcProvider(rpcURL)
+            
             const before = Date.now()
             
             await provider.getBlock('latest')
@@ -107,6 +108,7 @@ class Util {
     static getWebSocketRPCLatency = async (rpcURL: string): Promise<number> => {
         try {
             const provider = new ethers.providers.WebSocketProvider(rpcURL)
+            
             const before = Date.now()
             
             await provider.getBlock('latest')
