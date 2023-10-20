@@ -86,7 +86,7 @@ class EthereumWallet {
      * @param derivationPath 
      * @returns {EvmWallet}
      */
-    importWallet = (mnemonic: string, nonce?: number, derivationPath?: string): EvmWallet => {
+    recoverWallet = (mnemonic: string, nonce?: number, derivationPath?: string): EvmWallet => {
         const path = derivationPath || ETHEREUM_DEFAULT;
     
         const index = nonce || 0;
@@ -118,14 +118,14 @@ class EthereumWallet {
 
     /**
      * 
-     * @param rootKey 
+     * @param rootSeed 
      * @param nonce 
      * @returns {EvmAccount}
      */
-    createAccount = async (rootKey: any, nonce: number): Promise<EvmAccount> => {
+    createAccount = async (rootSeed: Buffer, nonce?: number): Promise<EvmAccount> => {
         try {
-            const hdWallet = await hdkey.fromMasterSeed(rootKey);
-            const wallet = hdWallet.derivePath(ETHEREUM_DEFAULT + nonce).getWallet();
+            const hdWallet = await hdkey.fromMasterSeed(rootSeed);
+            const wallet = hdWallet.derivePath(ETHEREUM_DEFAULT + (nonce || 0)).getWallet();
             const address = `0x${wallet.getAddress().toString('hex')}`;
             const privateKey = wallet.getPrivateKey().toString('hex');
         
