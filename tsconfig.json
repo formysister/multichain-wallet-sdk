@@ -13,7 +13,8 @@
     "paths": {
       "*": ["src/*", "node_modules/*"],
     },
-    "typeRoots": ["src/type"],
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["jest"],
     "esModuleInterop": true,
     "sourceMap": false
   },

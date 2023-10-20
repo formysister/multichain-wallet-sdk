@@ -1,22 +1,25 @@
 /* eslint-disable */
 
+// import core-packages
 import { BigNumber, Contract, ContractInterface, ethers } from 'ethers';
 import { hdkey } from 'ethereumjs-wallet';
 import { mnemonicToSeed } from 'bip39';
 
 // import constants
-import { ETHEREUM_DEFAULT } from '../../utils/constant';
-// import actions
 import {
     ERC721_INTERFACE_ID,
-    ERC1155_INTERFACE_ID
-} from '../../utils/constant';
+    ERC1155_INTERFACE_ID,
+    ETHEREUM_DEFAULT
+} from '../../constant';
 // import ABI
 import { erc20ABI, ecr721ABI, erc1155ABI } from '../../abi'
+// import Util class
 import Util from '../../util_class/ethereum';
 
+// import types
+import { EvmWallet, EvmAccount, EvmTokenDetail, ERCTokenType, IsNFT } from '../../type/type';
+
 class EthereumWallet {
-    
     // Network data
     provider: ethers.providers.JsonRpcProvider | ethers.providers.Web3Provider
     chainId: number = 0

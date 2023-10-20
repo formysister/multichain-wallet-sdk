@@ -1,23 +1,23 @@
-type EvmWallet = {
+export type EvmWallet = {
     address: string,
     privateKey: string,
     mnemonic: string,
     nonce?: number
 }
 
-type EvmAccount = {
+export type EvmAccount = {
     address: string,
     privateKey: string
 }
 
-type ERCTokenType = 'ERC20' | 'ERC721' | 'ERC1155' | undefined
+export type ERCTokenType = 'ERC20' | 'ERC721' | 'ERC1155' | undefined
 
-type IsNFT = {
+export type IsNFT = {
     isNFT: boolean,
     tokenType: ERCTokenType
 }
 
-type EvmTokenDetail = {
+export type EvmTokenDetail = {
     name: string,
     symbol: string,
     decimals: number,
@@ -27,7 +27,7 @@ type EvmTokenDetail = {
     tokenType: ERCTokenType
 }
 
-type EvmTransaction = {
+export type EvmTransaction = {
     to: string,
     from?: string,
     value?: number,
