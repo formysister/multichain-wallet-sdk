@@ -174,7 +174,7 @@ class EthereumWallet {
         const isContract = await this.isContractAddress(tokenAddress)
         let contract: ethers.Contract
         let tokenDetail: EvmTokenDetail
-    
+        
         if (!isContract) {
             tokenDetail = {
                 name: '',

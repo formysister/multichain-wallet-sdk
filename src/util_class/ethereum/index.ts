@@ -4,11 +4,21 @@ import { ETHER_GASSTATION_API } from "../../utils/constant"
 import { EvmGasObject } from "../../type/interface"
 
 class Util {
+    /**
+     * 
+     * @param amount 
+     * @returns {BigNumber}
+     */
     static gweiToWei = (amount: string | number): BigNumber => {
         const weiValue = ethers.utils.parseUnits(amount.toString(), 'gwei')
         return weiValue
     }
     
+    /**
+     * 
+     * @param amount 
+     * @returns {String}
+     */
     static gweiToEther = (amount: string | number): string => {
         const weiValue = ethers.utils.parseUnits(amount.toString(), 'gwei')
         const etherValue = ethers.utils.formatEther(weiValue)
@@ -16,11 +26,20 @@ class Util {
         return etherValue
     }
     
+    /**
+     * 
+     * @param amount 
+     * @returns {String}
+     */
     static weiToEther = (amount: string | number): string => {
         const etherValue = ethers.utils.formatEther(amount.toString())
         return etherValue
     }
 
+    /**
+     * 
+     * @returns {EvmGasObject}
+     */
     static getGas = async (): Promise<EvmGasObject> => {
         try {
             const gasResponse = await axios.get(ETHER_GASSTATION_API)
@@ -55,6 +74,48 @@ class Util {
             }
         }
         catch (error) {
+            throw error
+        }
+    }
+
+    /**
+     * 
+     * @param rpcURL 
+     * @returns {Number}
+     */
+    static getJsonRPCLatency = async (rpcURL: string): Promise<number> => {
+        try {
+            const provider = new ethers.providers.JsonRpcProvider(rpcURL)
+            const before = Date.now()
+            
+            await provider.getBlock('latest')
+
+            const after = Date.now()
+            
+            return after - before
+        }
+        catch(error) {
+            throw error
+        }
+    }
+
+    /**
+     * 
+     * @param rpcURL 
+     * @returns {Number}
+     */
+    static getWebSocketRPCLatency = async (rpcURL: string): Promise<number> => {
+        try {
+            const provider = new ethers.providers.WebSocketProvider(rpcURL)
+            const before = Date.now()
+            
+            await provider.getBlock('latest')
+
+            const after = Date.now()
+            
+            return after - before
+        }
+        catch(error) {
             throw error
         }
     }
