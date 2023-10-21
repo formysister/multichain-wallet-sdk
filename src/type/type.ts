@@ -36,3 +36,5 @@ export type EvmTransaction = {
     gasLimit?: number,
     gasPrice?: number
 }
+
+export type BtcNetwork = "bitcoin" | "regtest" | "testnet"
