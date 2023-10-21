@@ -1,12 +1,13 @@
 import bip39 from 'bip39'
-import bitcoin from 'bitcoinjs-lib'
 import bip32 from 'bip32'
+import bitcoin from 'bitcoinjs-lib'
+import { PrivateKey } from 'bitcore-lib';
 
-import { BtcNetwork, BtcAccount } from "../../type/type"
+import { BtcNetwork, BtcWallet, BtcAccount } from "../../type/type"
 import { BITCOIN_DEFAULT, BTC_MAINNET, BTC_REGTEST, BTC_TESTNET } from "../../constant";
 
 class BitCoinWallet {
-    createWallet = (network: BtcNetwork, derivedPath?: string): BtcAccount => {
+    createWallet = (network: BtcNetwork, derivedPath?: string): BtcWallet => {
         let btcNetwork;
 
         switch(network) {
@@ -46,7 +47,7 @@ class BitCoinWallet {
         }
     }
 
-    importWallet = (mnemonic: string, network: string, derivedPath?: string): BtcAccount => {
+    recoverWallet = (mnemonic: string, network: string, derivedPath?: string): BtcWallet => {
         let btcNetwork;
     
         switch(network) {
@@ -82,6 +83,39 @@ class BitCoinWallet {
             address: address,
             privateKey: node.toWIF(),
             mnemonic: mnemonic
+        }
+    }
+
+    importAccount = (network: string, privateKey: string): BtcAccount => {
+        let btcNetwork;
+    
+        switch(network) {
+            case BTC_MAINNET:
+                btcNetwork = bitcoin.networks.bitcoin;
+                break;
+            case BTC_REGTEST:
+                btcNetwork = bitcoin.networks.regtest;
+                break;
+            case BTC_TESTNET:
+                btcNetwork = bitcoin.networks.testnet;
+                break;
+            default:
+                btcNetwork = bitcoin.networks.bitcoin;
+                break;
+        }
+    
+        const privateKeyObj = new PrivateKey(privateKey);
+    
+        const publicKey = privateKeyObj.publicKey.toBuffer();
+    
+        const address = bitcoin.payments.p2pkh({
+            pubkey: publicKey,
+            network: btcNetwork
+        }).address || '';
+    
+        return {
+            address: address,
+            privateKey: privateKey,
         }
     }
 }
