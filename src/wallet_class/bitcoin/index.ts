@@ -2,11 +2,11 @@ import bip39 from 'bip39'
 import bitcoin from 'bitcoinjs-lib'
 import bip32 from 'bip32'
 
-import { BtcNetwork } from "../../type/type"
+import { BtcNetwork, BtcAccount } from "../../type/type"
 import { BITCOIN_DEFAULT, BTC_MAINNET, BTC_REGTEST, BTC_TESTNET } from "../../constant";
 
 class BitCoinWallet {
-    createWallet = (network: BtcNetwork, derivedPath?: string) => {
+    createWallet = (network: BtcNetwork, derivedPath?: string): BtcAccount => {
         let btcNetwork;
 
         switch(network) {
@@ -37,7 +37,7 @@ class BitCoinWallet {
         const address = bitcoin.payments.p2pkh({
             pubkey: node.publicKey,
             network: btcNetwork
-        }).address;
+        }).address || '';
     
         return {
             address: address,
