@@ -7,6 +7,12 @@ import { BtcNetwork, BtcWallet, BtcAccount } from "../../type/type"
 import { BITCOIN_DEFAULT, BTC_MAINNET, BTC_REGTEST, BTC_TESTNET } from "../../constant";
 
 class BitCoinWallet {
+    /**
+     * 
+     * @param network 
+     * @param derivedPath 
+     * @returns {BtcWallet}
+     */
     createWallet = (network: BtcNetwork, derivedPath?: string): BtcWallet => {
         let btcNetwork;
 
@@ -47,6 +53,13 @@ class BitCoinWallet {
         }
     }
 
+    /**
+     * 
+     * @param mnemonic 
+     * @param network 
+     * @param derivedPath 
+     * @returns {BtcWallet}
+     */
     recoverWallet = (mnemonic: string, network: string, derivedPath?: string): BtcWallet => {
         let btcNetwork;
     
@@ -86,6 +99,12 @@ class BitCoinWallet {
         }
     }
 
+    /**
+     * 
+     * @param network 
+     * @param privateKey 
+     * @returns {BtcAccount}
+     */
     importAccount = (network: string, privateKey: string): BtcAccount => {
         let btcNetwork;
     
