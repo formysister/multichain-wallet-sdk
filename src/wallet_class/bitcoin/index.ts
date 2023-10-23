@@ -7,16 +7,37 @@ import { BtcNetwork, BtcWallet, BtcAccount } from "../../type/type"
 import { BITCOIN_DEFAULT, BTC_MAINNET, BTC_REGTEST, BTC_TESTNET } from "../../constant";
 
 class BitCoinWallet {
+
+    privateKey: string
+    address: string
+
+    constructor(privateKey?: string, network?: BtcNetwork) {
+        if(privateKey) {
+            const _tempWallet = this.importAccount(privateKey, network || BTC_MAINNET)
+            
+            this.privateKey = _tempWallet.privateKey
+            this.address = _tempWallet.address
+        }
+        else {
+            const _tempWallet = this.createWallet(network || BTC_MAINNET)
+            
+            this.privateKey = _tempWallet.privateKey
+            this.address = _tempWallet.address
+        }
+    }
+
     /**
      * 
      * @param network 
      * @param derivedPath 
      * @returns {BtcWallet}
      */
-    createWallet = (network: BtcNetwork, derivedPath?: string): BtcWallet => {
+    createWallet = (network?: BtcNetwork, derivedPath?: string): BtcWallet => {
         let btcNetwork;
 
-        switch(network) {
+        const currentNetwork = network || BTC_MAINNET
+
+        switch(currentNetwork) {
             case BTC_MAINNET:
                 btcNetwork = bitcoin.networks.bitcoin;
                 break;
@@ -105,10 +126,12 @@ class BitCoinWallet {
      * @param privateKey 
      * @returns {BtcAccount}
      */
-    importAccount = (network: string, privateKey: string): BtcAccount => {
+    importAccount = (privateKey: string, network?: BtcNetwork): BtcAccount => {
         let btcNetwork;
-    
-        switch(network) {
+        
+        const currentNetwork = network || BTC_MAINNET
+
+        switch(currentNetwork) {
             case BTC_MAINNET:
                 btcNetwork = bitcoin.networks.bitcoin;
                 break;
