@@ -1,4 +1,5 @@
 import EthereumWallet from '../src/wallet_class/ethereum'
+import BitcoinWallet from '../src/wallet_class/bitcoin'
 import SAMPLE_DATA from './sample_data'
 
 jest.setTimeout(50000)
@@ -97,6 +98,19 @@ describe("Wallet Test", () => {
 
             expect(isERC1155NFT_true).toBe(true)
             expect(isERC1155NFT_false).toBe(false)
+        })
+    })
+
+    describe("Bitcoin Wellet Test", () => {
+        let bitcoinWallet: BitcoinWallet
+
+        beforeAll(() => {
+            bitcoinWallet = new BitcoinWallet()
+        })
+
+        it("Check Initial wallet data", () => {
+            expect(typeof bitcoinWallet.privateKey).toBe('string')
+            expect(typeof bitcoinWallet.address).toBe('string')
         })
     })
 })

@@ -1,6 +1,6 @@
-import bip39 from 'bip39'
-import bip32 from 'bip32'
-import bitcoin from 'bitcoinjs-lib'
+import * as bip39 from 'bip39'
+import * as bip32 from 'bip32'
+import * as bitcoin from 'bitcoinjs-lib'
 import { PrivateKey } from 'bitcore-lib';
 
 import { BtcNetwork, BtcWallet, BtcAccount } from "../../type/type"
@@ -53,7 +53,7 @@ class BitCoinWallet {
         }
     
         const path = derivedPath || BITCOIN_DEFAULT;
-    
+
         const mnemonic = bip39.generateMnemonic();
         const seed = bip39.mnemonicToSeedSync(mnemonic);
     
@@ -66,7 +66,7 @@ class BitCoinWallet {
             pubkey: node.publicKey,
             network: btcNetwork
         }).address || '';
-    
+
         return {
             address: address,
             privateKey: node.toWIF(),
@@ -98,7 +98,7 @@ class BitCoinWallet {
                 btcNetwork = bitcoin.networks.bitcoin;
                 break;
         }
-    
+
         const path = derivedPath || BITCOIN_DEFAULT;
     
         const seed = bip39.mnemonicToSeedSync(mnemonic);
