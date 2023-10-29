@@ -101,16 +101,16 @@ describe("Wallet Test", () => {
         })
     })
 
-    // describe("Bitcoin Wellet Test", () => {
-    //     let bitcoinWallet: BitcoinWallet
+    describe("Bitcoin Wellet Test", () => {
+        let bitcoinWallet: BitcoinWallet
 
-    //     beforeAll(() => {
-    //         bitcoinWallet = new BitcoinWallet()
-    //     })
+        beforeAll(() => {
+            bitcoinWallet = new BitcoinWallet()
+        })
 
-    //     it("Check Initial wallet data", () => {
-    //         expect(typeof bitcoinWallet.privateKey).toBe('string')
-    //         expect(typeof bitcoinWallet.address).toBe('string')
-    //     })
-    // })
+        it("Check Initial wallet data", () => {
+            expect(typeof bitcoinWallet.privateKey).toBe('string')
+            expect(typeof bitcoinWallet.address).toBe('string')
+        })
+    })
 })
