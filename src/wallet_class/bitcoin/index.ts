@@ -11,6 +11,11 @@ class BitCoinWallet {
     privateKey: string
     address: string
 
+    /**
+     * 
+     * @param privateKey 
+     * @param network 
+     */
     constructor(privateKey?: string, network?: BtcNetwork) {
         if(privateKey) {
             const _tempWallet = this.importAccount(privateKey, network || BTC_MAINNET)
