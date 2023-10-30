@@ -1,3 +1,5 @@
+import { BtcNetwork } from "../type/type"
+
 // Network Names
 export const ETHEREUM: string = 'ETHEREUM';
 export const SOLANA: string = 'SOLANA';
@@ -20,10 +22,11 @@ export const ERC1155_INTERFACE_ID = '0xd9b67a26'
 export const MAINNET_BETA: string = 'mainnet-beta';
 export const TESTNET: string = 'testnet';
 export const DEVNET: string = 'devnet';
+
 // Bitcoin network
-export const BTC_MAINNET = 'bitcoin';
-export const BTC_REGTEST = 'regtest';
-export const BTC_TESTNET = 'testnet';
+export const BTC_MAINNET: BtcNetwork = "bitcoin"
+export const BTC_REGTEST: BtcNetwork = "regtest"
+export const BTC_TESTNET: BtcNetwork = "testnet"
 
 // Network Prototype
 export const LITECOIN_NETWORK_PROTOTYPE = {

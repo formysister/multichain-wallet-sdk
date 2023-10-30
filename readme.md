@@ -1,4 +1,5 @@
-## Vipay-Wallet
+# ⚠ This library is under construction ⚠
+## multichain-wallet-sdk  [multichain wallet development kit]
 ### installation
 ```
 npm install vipay-multichain-wallet

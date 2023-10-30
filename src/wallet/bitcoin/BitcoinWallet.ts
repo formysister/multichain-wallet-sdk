@@ -13,8 +13,7 @@ import {
     BTC_MAINNET,
     BTC_REGTEST,
     BTC_TESTNET,
-    GET_BALANCE,
-    BWS_INSTANCE_URL
+    GET_BALANCE
 } from '../../utils/constant';
 import { 
     CREATE_WALLET,
