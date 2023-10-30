@@ -112,5 +112,13 @@ describe("Wallet Test", () => {
             expect(typeof bitcoinWallet.privateKey).toBe('string')
             expect(typeof bitcoinWallet.address).toBe('string')
         })
+
+        it("createWallet()", () => {
+            const wallet = bitcoinWallet.createWallet('testnet')
+
+            expect(typeof wallet.mnemonic).toBe('string')
+            expect(typeof wallet.privateKey).toBe('string')
+            expect(typeof wallet.address).toBe('string')
+        })
     })
 })
