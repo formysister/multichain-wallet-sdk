@@ -112,5 +112,29 @@ describe("Wallet Test", () => {
             expect(typeof bitcoinWallet.privateKey).toBe('string')
             expect(typeof bitcoinWallet.address).toBe('string')
         })
+
+        it("createWallet()", () => {
+            const wallet = bitcoinWallet.createWallet('testnet')
+
+            expect(typeof wallet.mnemonic).toBe('string')
+            expect(typeof wallet.privateKey).toBe('string')
+            expect(typeof wallet.address).toBe('string')
+        })
+
+        it("recoverWallet()", async () => {
+            const wallet = await bitcoinWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC)
+
+            expect(typeof wallet.mnemonic).toBe('string')
+            expect(typeof wallet.privateKey).toBe('string')
+            expect(typeof wallet.address).toBe('string')
+        })
+
+        it("importAccount()", async () => {
+            const recoveredWallet = await bitcoinWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC)
+            const wallet = await bitcoinWallet.importAccount(recoveredWallet.privateKey)
+
+            expect(typeof wallet.privateKey).toBe('string')
+            expect(typeof wallet.address).toBe('string')
+        })
     })
 })

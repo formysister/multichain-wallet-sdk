@@ -86,10 +86,12 @@ class BitCoinWallet {
      * @param derivedPath 
      * @returns {BtcWallet}
      */
-    recoverWallet = (mnemonic: string, network: string, derivedPath?: string): BtcWallet => {
+    recoverWallet = (mnemonic: string, network?: BtcNetwork, derivedPath?: string): BtcWallet => {
         let btcNetwork;
     
-        switch(network) {
+        const currentNetwork = network || BTC_MAINNET
+
+        switch(currentNetwork) {
             case BTC_MAINNET:
                 btcNetwork = bitcoin.networks.bitcoin;
                 break;
