@@ -136,5 +136,11 @@ describe("Wallet Test", () => {
             expect(typeof wallet.privateKey).toBe('string')
             expect(typeof wallet.address).toBe('string')
         })
+
+        it("getBalance", async () => {
+            const balance = await bitcoinWallet.getBalance(SAMPLE_DATA.BITCOIN.SAMPLE_ADDRESS)
+
+            console.log(typeof balance)
+        })
     })
 })

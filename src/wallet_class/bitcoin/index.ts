@@ -3,6 +3,8 @@ import * as bip32 from 'bip32'
 import * as bitcoin from 'bitcoinjs-lib'
 import { PrivateKey } from 'bitcore-lib';
 
+import axios from 'axios';
+
 import { BtcNetwork, BtcWallet, BtcAccount } from "../../type/type"
 import { BITCOIN_DEFAULT, BTC_MAINNET, BTC_REGTEST, BTC_TESTNET } from "../../constant";
 
@@ -165,6 +167,21 @@ class BitCoinWallet {
         return {
             address: address,
             privateKey: privateKey,
+        }
+    }
+
+    /**
+     * 
+     * @param address 
+     * @returns {Number}
+     */
+    getBalance = async (address: string): Promise<number> => {
+        try {
+            const response = await axios.get(`https://blockchain.info/q/addressbalance/${address}/`)
+
+            return response.data
+        } catch (error) {
+            throw error
         }
     }
 }
