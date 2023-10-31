@@ -1,9 +1,9 @@
 # ⚠ This library is under construction ⚠
 ## multichain-wallet-sdk  [multichain wallet development kit]
+
+<span style="color: yellow">Old version package was deprecated from NPM. New one will be published.</span>
+
 ### installation
-
-<span style="color: orange;">Old version package was deprecated from NPM. New one will be published.</span>
-
 ```
 npm install vipay-multichain-wallet
 ```
