@@ -110,7 +110,7 @@ describe("Wallet Test", () => {
 
         it("Check Initial wallet data", () => {
             expect(typeof bitcoinWallet.privateKey).toBe('string')
-            expect(typeof bitcoinWallet.address).toBe('string')
+            expect(typeof bitcoinWallet.address).toBe('object')
         })
 
         it("createWallet()", () => {
@@ -118,7 +118,7 @@ describe("Wallet Test", () => {
 
             expect(typeof wallet.mnemonic).toBe('string')
             expect(typeof wallet.privateKey).toBe('string')
-            expect(typeof wallet.address).toBe('string')
+            expect(typeof wallet.address).toBe('object')
         })
 
         it("recoverWallet()", async () => {
@@ -126,7 +126,9 @@ describe("Wallet Test", () => {
 
             expect(typeof wallet.mnemonic).toBe('string')
             expect(typeof wallet.privateKey).toBe('string')
-            expect(typeof wallet.address).toBe('string')
+            expect(typeof wallet.address).toBe('object')
+
+            console.log(wallet)
         })
 
         it("importAccount()", async () => {
@@ -134,13 +136,13 @@ describe("Wallet Test", () => {
             const wallet = await bitcoinWallet.importAccount(recoveredWallet.privateKey)
 
             expect(typeof wallet.privateKey).toBe('string')
-            expect(typeof wallet.address).toBe('string')
+            expect(typeof wallet.address).toBe('object')
         })
 
         it("getBalance", async () => {
             const balance = await bitcoinWallet.getBalance(SAMPLE_DATA.BITCOIN.SAMPLE_ADDRESS)
 
-            console.log(typeof balance)
+            expect(typeof balance).toBe('number')
         })
     })
 })

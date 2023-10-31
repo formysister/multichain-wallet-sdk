@@ -11,7 +11,7 @@ import { BITCOIN_DEFAULT, BTC_MAINNET, BTC_REGTEST, BTC_TESTNET } from "../../co
 class BitCoinWallet {
 
     privateKey: string
-    address: string
+    address: { p2pkh: string, bech32: string }
 
     /**
      * 
@@ -69,13 +69,20 @@ class BitCoinWallet {
         const account = root.derivePath(path);
         const node = account.derive(0);
     
-        const address = bitcoin.payments.p2pkh({
+        const publicKeyP2pkh = bitcoin.payments.p2pkh({
             pubkey: node.publicKey,
             network: btcNetwork
         }).address || '';
 
+        const publicKeyBech32 = bitcoin.payments.p2wpkh({
+            pubkey: node.publicKey
+        }).address || ''
+
         return {
-            address: address,
+            address: {
+                p2pkh: publicKeyP2pkh,
+                bech32: publicKeyBech32
+            },
             privateKey: node.toWIF(),
             mnemonic: mnemonic
         }
@@ -117,13 +124,20 @@ class BitCoinWallet {
         const account = root.derivePath(path);
         const node = account.derive(0);
     
-        const address = bitcoin.payments.p2pkh({
+        const publicKeyP2pkh = bitcoin.payments.p2pkh({
             pubkey: node.publicKey,
             network: btcNetwork
         }).address || '';
     
+        const publicKeyBech32 = bitcoin.payments.p2wpkh({
+            pubkey: node.publicKey
+        }).address || ''
+
         return {
-            address: address,
+            address: {
+                p2pkh: publicKeyP2pkh,
+                bech32: publicKeyBech32
+            },
             privateKey: node.toWIF(),
             mnemonic: mnemonic
         }
@@ -157,15 +171,22 @@ class BitCoinWallet {
     
         const privateKeyObj = new PrivateKey(privateKey);
     
-        const publicKey = privateKeyObj.publicKey.toBuffer();
+        const publicKeyBuffer = privateKeyObj.publicKey.toBuffer();
     
-        const address = bitcoin.payments.p2pkh({
-            pubkey: publicKey,
+        const publicKeyP2Pkh = bitcoin.payments.p2pkh({
+            pubkey: publicKeyBuffer,
             network: btcNetwork
         }).address || '';
     
+        const publicKeyBech32 = bitcoin.payments.p2wpkh({
+            pubkey: publicKeyBuffer
+        }).address || ''
+
         return {
-            address: address,
+            address: {
+                p2pkh: publicKeyP2Pkh,
+                bech32: publicKeyBech32
+            },
             privateKey: privateKey,
         }
     }

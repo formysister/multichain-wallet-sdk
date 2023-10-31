@@ -44,12 +44,18 @@ export type EvmTransaction = {
 export type BtcNetwork = "bitcoin" | "regtest" | "testnet"
 
 export type BtcWallet = {
-    address: string,
+    address: {
+        p2pkh: string,
+        bech32: string
+    }
     privateKey: string,
     mnemonic: string
 }
 
 export type BtcAccount = {
-    address: string,
+    address: {
+        p2pkh: string,
+        bech32: string
+    }
     privateKey: string
 }
