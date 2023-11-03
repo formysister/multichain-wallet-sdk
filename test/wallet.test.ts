@@ -127,8 +127,6 @@ describe("Wallet Test", () => {
             expect(typeof wallet.mnemonic).toBe('string')
             expect(typeof wallet.privateKey).toBe('string')
             expect(typeof wallet.address).toBe('object')
-
-            console.log(wallet)
         })
 
         it("importAccount()", async () => {

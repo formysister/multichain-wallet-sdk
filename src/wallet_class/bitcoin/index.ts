@@ -205,6 +205,18 @@ class BitCoinWallet {
             throw error
         }
     }
+
+    /**
+     * 
+     */
+    setBitcoin = async () => {
+        try {
+            
+        }
+        catch(error) {
+
+        }
+    }
 }
 
 export default BitCoinWallet
