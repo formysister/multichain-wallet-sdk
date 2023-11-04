@@ -206,9 +206,6 @@ class BitCoinWallet {
         }
     }
 
-    /**
-     * 
-     */
     setBitcoin = async (receiverAddress: string, amount: number) => {
         try {
             const response = await axios.get(`https://blockchain.info/unspent?active=${this.address.bech32}`)
