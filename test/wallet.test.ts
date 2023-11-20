@@ -130,17 +130,25 @@ describe("Wallet Test", () => {
         })
 
         it("importAccount()", async () => {
-            const recoveredWallet = await bitcoinWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC)
-            const wallet = await bitcoinWallet.importAccount(recoveredWallet.privateKey)
+            const recoveredWallet = await bitcoinWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC, "regtest")
+            const wallet = await bitcoinWallet.importAccount(recoveredWallet.privateKey, "testnet")
+
+            console.log(wallet.address)
 
             expect(typeof wallet.privateKey).toBe('string')
             expect(typeof wallet.address).toBe('object')
         })
 
-        it("getBalance", async () => {
+        it("getBalance()", async () => {
             const balance = await bitcoinWallet.getBalance(SAMPLE_DATA.BITCOIN.SAMPLE_ADDRESS)
 
             expect(typeof balance).toBe('number')
+        })
+
+        it("sendBitcoin()", async () => {
+            const utxos = await bitcoinWallet.sendBitcoin('', 0)
+
+            console.log(utxos)
         })
     })
 })

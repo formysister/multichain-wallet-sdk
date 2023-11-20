@@ -5,6 +5,8 @@ import { PrivateKey } from 'bitcore-lib';
 
 import axios from 'axios';
 
+import { fetchUTXOs } from '../../helper/bitcoinHelper';
+
 import { BtcNetwork, BtcWallet, BtcAccount } from "../../type/type"
 import { BITCOIN_DEFAULT, BTC_MAINNET, BTC_REGTEST, BTC_TESTNET } from "../../constant";
 
@@ -19,15 +21,15 @@ class BitCoinWallet {
      * @param network 
      */
     constructor(privateKey?: string, network?: BtcNetwork) {
-        if(privateKey) {
+        if (privateKey) {
             const _tempWallet = this.importAccount(privateKey, network || BTC_MAINNET)
-            
+
             this.privateKey = _tempWallet.privateKey
             this.address = _tempWallet.address
         }
         else {
             const _tempWallet = this.createWallet(network || BTC_MAINNET)
-            
+
             this.privateKey = _tempWallet.privateKey
             this.address = _tempWallet.address
         }
@@ -44,7 +46,7 @@ class BitCoinWallet {
 
         const currentNetwork = network || BTC_MAINNET
 
-        switch(currentNetwork) {
+        switch (currentNetwork) {
             case BTC_MAINNET:
                 btcNetwork = bitcoin.networks.bitcoin;
                 break;
@@ -58,24 +60,25 @@ class BitCoinWallet {
                 btcNetwork = bitcoin.networks.bitcoin;
                 break;
         }
-    
+
         const path = derivedPath || BITCOIN_DEFAULT;
 
         const mnemonic = bip39.generateMnemonic();
         const seed = bip39.mnemonicToSeedSync(mnemonic);
-    
+
         const root = bip32.fromSeed(seed, btcNetwork);
-    
+
         const account = root.derivePath(path);
         const node = account.derive(0);
-    
+
         const publicKeyP2pkh = bitcoin.payments.p2pkh({
             pubkey: node.publicKey,
             network: btcNetwork
         }).address || '';
 
         const publicKeyBech32 = bitcoin.payments.p2wpkh({
-            pubkey: node.publicKey
+            pubkey: node.publicKey,
+            network: btcNetwork
         }).address || ''
 
         return {
@@ -97,10 +100,10 @@ class BitCoinWallet {
      */
     recoverWallet = (mnemonic: string, network?: BtcNetwork, derivedPath?: string): BtcWallet => {
         let btcNetwork;
-    
+
         const currentNetwork = network || BTC_MAINNET
 
-        switch(currentNetwork) {
+        switch (currentNetwork) {
             case BTC_MAINNET:
                 btcNetwork = bitcoin.networks.bitcoin;
                 break;
@@ -116,21 +119,22 @@ class BitCoinWallet {
         }
 
         const path = derivedPath || BITCOIN_DEFAULT;
-    
+
         const seed = bip39.mnemonicToSeedSync(mnemonic);
         // const bip32 = BIP32Factory(ecc);
         const root = bip32.fromSeed(seed, btcNetwork);
-    
+
         const account = root.derivePath(path);
         const node = account.derive(0);
-    
+
         const publicKeyP2pkh = bitcoin.payments.p2pkh({
             pubkey: node.publicKey,
             network: btcNetwork
         }).address || '';
-    
+
         const publicKeyBech32 = bitcoin.payments.p2wpkh({
-            pubkey: node.publicKey
+            pubkey: node.publicKey,
+            network: btcNetwork
         }).address || ''
 
         return {
@@ -151,10 +155,10 @@ class BitCoinWallet {
      */
     importAccount = (privateKey: string, network?: BtcNetwork): BtcAccount => {
         let btcNetwork;
-        
+
         const currentNetwork = network || BTC_MAINNET
 
-        switch(currentNetwork) {
+        switch (currentNetwork) {
             case BTC_MAINNET:
                 btcNetwork = bitcoin.networks.bitcoin;
                 break;
@@ -168,18 +172,19 @@ class BitCoinWallet {
                 btcNetwork = bitcoin.networks.bitcoin;
                 break;
         }
-    
+
         const privateKeyObj = new PrivateKey(privateKey);
-    
+
         const publicKeyBuffer = privateKeyObj.publicKey.toBuffer();
-    
+
         const publicKeyP2Pkh = bitcoin.payments.p2pkh({
             pubkey: publicKeyBuffer,
             network: btcNetwork
         }).address || '';
-    
+
         const publicKeyBech32 = bitcoin.payments.p2wpkh({
-            pubkey: publicKeyBuffer
+            pubkey: publicKeyBuffer,
+            network: btcNetwork
         }).address || ''
 
         return {
@@ -212,15 +217,15 @@ class BitCoinWallet {
      * @param amount 
      * @returns {any}
      */
-    setBitcoin = async (receiverAddress: string, amount: number): Promise<any> => {
+    sendBitcoin = async (receiverAddress: string, amount: number): Promise<any> => {
         try {
             const response = await axios.get(`https://blockchain.info/unspent?active=${this.address.bech32}`)
-            const utxos = response.data.unspent_outputs
+            const utxos_1 = response.data.unspent_outputs
 
-            return utxos
+            return utxos_1
         }
-        catch(error) {
-
+        catch (error) {
+            throw error
         }
     }
 }
