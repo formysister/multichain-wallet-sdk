@@ -201,9 +201,24 @@ class BitCoinWallet {
      * @param address 
      * @returns {Number}
      */
-    getBalance = async (address: string): Promise<number> => {
+    getBalance = async (address: string, network?: BtcNetwork): Promise<number> => {
         try {
-            const response = await axios.get(`https://blockchain.info/q/addressbalance/${address}/`)
+            let response
+
+            switch(network) {
+                case "bitcoin":
+                    response = await axios.get(`https://blockchain.info/q/addressbalance/${address}/`)
+                    break;
+                case "testnet":
+                    response = await axios.get(`https://blockstream.info/testnet/api/address/${address}/utxo`)
+                    break;
+                case "regtest":
+                    response = await axios.get(`https://blockstream.info/testnet/api/address/${address}/utxo`)
+                    break;
+                default:
+                    response = await axios.get(`https://blockchain.info/q/addressbalance/${address}/`)
+                    break;
+            }
 
             return response.data
         } catch (error) {
