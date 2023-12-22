@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 // import core-packages
-import { BigNumber, Contract, ContractInterface, ethers } from 'ethers';
+import { Contract, ContractInterface, Interface, InterfaceAbi, ethers } from 'ethers';
 import { hdkey } from 'ethereumjs-wallet';
 import { mnemonicToSeed } from 'bip39';
 
@@ -21,8 +21,8 @@ import { EvmWallet, EvmAccount, EvmTokenDetail, ERCTokenType, IsNFT } from '../.
 
 class EthereumWallet {
     // Network data
-    provider: ethers.providers.JsonRpcProvider | ethers.providers.Web3Provider
-    chainId: number = 0
+    provider: ethers.JsonRpcProvider
+    chainId: number | BigInt = 0
 
     // Wallet main data
     privateKey: string
@@ -38,7 +38,7 @@ class EthereumWallet {
      * @param privateKey 
      */
     constructor(rpcUrl: string, privateKey?: string) {
-        this.provider = new ethers.providers.JsonRpcProvider(rpcUrl)
+        this.provider = new ethers.JsonRpcProvider(rpcUrl)
         
         this.provider.getNetwork().then(network => {
             this.chainId = network.chainId
@@ -65,16 +65,15 @@ class EthereumWallet {
      * @param nonce 
      * @returns {EvmWallet}
      */
-    createWallet = (derivationPath?: string, nonce?: number): EvmWallet => {
-        const path = derivationPath || ETHEREUM_DEFAULT;
+    createWallet = (nonce?: number): EvmWallet => {
         const index = nonce || Math.floor(Math.random() * 10);
     
-        const wallet = ethers.Wallet.createRandom({ path: path + index });
-    
+        const wallet = ethers.Wallet.createRandom();
+
         return {
             address: wallet.address,
             privateKey: wallet.privateKey,
-            mnemonic: wallet.mnemonic.phrase,
+            mnemonic: wallet.mnemonic?.phrase,
             nonce: index
         }
     }
@@ -86,17 +85,16 @@ class EthereumWallet {
      * @param derivationPath 
      * @returns {EvmWallet}
      */
-    recoverWallet = (mnemonic: string, nonce?: number, derivationPath?: string): EvmWallet => {
-        const path = derivationPath || ETHEREUM_DEFAULT;
+    recoverWallet = (mnemonic: string, nonce?: number): EvmWallet => {
     
         const index = nonce || 0;
     
-        const wallet = ethers.Wallet.fromMnemonic(mnemonic, path + index);
-    
+        const wallet = ethers.Wallet.fromPhrase(mnemonic);
+
         return {
             address: wallet.address,
             privateKey: wallet.privateKey,
-            mnemonic: wallet.mnemonic.phrase,
+            mnemonic: wallet.mnemonic?.phrase,
             nonce: index
         }
     }
@@ -104,7 +102,7 @@ class EthereumWallet {
     /**
      * 
      * @param mnemonic 
-     * @returns {Buffer}
+     * @returns {Promise<Buffer>}
      */
     createMasterSeedFromMnemonic = async (mnemonic: string): Promise<Buffer> => {
         try {
@@ -120,7 +118,7 @@ class EthereumWallet {
      * 
      * @param rootSeed 
      * @param nonce 
-     * @returns {EvmAccount}
+     * @returns {Promise<EvmAccount>}
      */
     createAccount = async (rootSeed: Buffer, nonce?: number): Promise<EvmAccount> => {
         try {
@@ -156,9 +154,9 @@ class EthereumWallet {
     /**
      * 
      * @param address 
-     * @returns {BigNumber}
+     * @returns {Promise<BigInt>}
      */
-    getBalance = async (address?: string): Promise<BigNumber> => {
+    getBalance = async (address?: string): Promise<BigInt> => {
         const balance = await this.provider.getBalance(address || this.address);
         return balance
     }
@@ -168,13 +166,13 @@ class EthereumWallet {
      * @param tokenAddress 
      * @param address 
      * @param tokenId 
-     * @returns {EvmTokenDetail}
+     * @returns {Promise<EvmTokenDetail>}
      */
     getToken = async (tokenAddress: string, address?: string, tokenId?: number): Promise<EvmTokenDetail> => {
         const isContract = await this.isContractAddress(tokenAddress)
         let contract: ethers.Contract
         let tokenDetail: EvmTokenDetail
-        
+
         if (!isContract) {
             tokenDetail = {
                 name: '',
@@ -272,9 +270,9 @@ class EthereumWallet {
      * 
      * @param tokenAddress 
      * @param address 
-     * @returns {BigNumber}
+     * @returns {Promise<BigInt>}
      */
-    getTokenBalance = async (tokenAddress: string, address?: string): Promise<BigNumber> => {
+    getTokenBalance = async (tokenAddress: string, address?: string): Promise<BigInt> => {
         try {
             const contract = new ethers.Contract(tokenAddress, erc20ABI, this.provider);
     
@@ -293,16 +291,16 @@ class EthereumWallet {
      * @param amount 
      * @param gasPrice 
      * @param gasLimit 
-     * @returns {ethers.Transaction}
+     * @returns {Promise<ethers.TransactionResponse>}
      */
-    sendEther = async (receiveAddress: string, amount: string, gasPrice?: any, gasLimit?: any): Promise<ethers.Transaction> => {
+    sendEther = async (receiveAddress: string, amount: string, gasPrice?: any, gasLimit?: any): Promise<ethers.TransactionResponse> => {
         try {
-            let tx: ethers.Transaction;
+            let tx: ethers.TransactionResponse;
 
             if(gasPrice && gasLimit) {
                 tx = await this.signer.sendTransaction({
                     to: receiveAddress,
-                    value: ethers.utils.parseUnits(amount),
+                    value: ethers.parseUnits(amount),
                     gasPrice,
                     gasLimit
                 })
@@ -310,7 +308,7 @@ class EthereumWallet {
             else {
                 tx = await this.signer.sendTransaction({
                     to: receiveAddress,
-                    value: ethers.utils.parseEther(amount),
+                    value: ethers.parseEther(amount),
                 })
             }
 
@@ -328,13 +326,13 @@ class EthereumWallet {
      * @param amount 
      * @param gasPrice 
      * @param gasLimit 
-     * @returns {ethers.Transaction}
+     * @returns {Promise<ethers.TransactionResponse>}
      */
-    tokenApprove = async (tokenAddress: string, amount: string, receiveAddress: string, gasPrice?: any, gasLimit?: any): Promise<ethers.Transaction> => {
+    tokenApprove = async (tokenAddress: string, amount: string, receiveAddress: string, gasPrice?: any, gasLimit?: any): Promise<ethers.TransactionResponse> => {
         const contract = new ethers.Contract(tokenAddress, erc20ABI, this.signer);
     
         try {
-            let tx: ethers.Transaction;
+            let tx: ethers.TransactionResponse;
     
             if(gasPrice && gasLimit) {
                 tx = await contract.approve(receiveAddress, amount, { gasPrice: gasPrice, gasLimit: gasLimit });
@@ -356,13 +354,13 @@ class EthereumWallet {
      * @param receiveAddress 
      * @param gasPrice 
      * @param gasLimit 
-     * @returns {ethers.Transaction}
+     * @returns {Promise<ethers.TransactionResponse>}
      */
-    tokenTransfer = async (tokenAddress: string, amount: any, receiveAddress: string, gasPrice?: any, gasLimit?: any): Promise<ethers.Transaction> => {
+    tokenTransfer = async (tokenAddress: string, amount: any, receiveAddress: string, gasPrice?: any, gasLimit?: any): Promise<ethers.TransactionResponse> => {
         const contract = new ethers.Contract(tokenAddress, erc20ABI, this.signer);
     
         try {
-            let tx: ethers.Transaction;
+            let tx: ethers.TransactionResponse;
             if(gasPrice && gasLimit) {
                 tx = await contract.transfer(receiveAddress, amount, { gasPrice, gasLimit });
             }
@@ -380,7 +378,7 @@ class EthereumWallet {
     /**
      * 
      * @param address 
-     * @returns {Boolean}
+     * @returns {Promise<boolean>}
      */
     isContractAddress = async (address: string): Promise<boolean> => {
         try {
@@ -397,7 +395,7 @@ class EthereumWallet {
     /**
      * 
      * @param address 
-     * @returns {IsNFT}
+     * @returns {Promise<IsNFT>}
      */
     isNftContract = async (address: string): Promise<IsNFT> => {
 
@@ -431,7 +429,7 @@ class EthereumWallet {
     /**
      * 
      * @param address 
-     * @returns {Boolean}
+     * @returns {Promise<boolean>}
      */
     isERC721NFT = async (address: string): Promise<boolean> => {
         const contract = new ethers.Contract(address, ecr721ABI, this.provider)
@@ -448,7 +446,7 @@ class EthereumWallet {
     /**
      * 
      * @param address 
-     * @returns {Boolean}
+     * @returns {Promise<boolean>}
      */
     isERC1155NFT = async (address: string): Promise<boolean> => {
         const contract = new ethers.Contract(address, erc1155ABI, this.provider)
@@ -468,7 +466,7 @@ class EthereumWallet {
      * @param abi 
      * @returns {Contract}
      */
-    getContract = (address: string, abi: ContractInterface): Contract => {
+    getContract = (address: string, abi: Interface | InterfaceAbi): Contract => {
         const contract = new ethers.Contract(address, abi, this.provider)
 
         return contract

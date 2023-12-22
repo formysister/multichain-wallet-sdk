@@ -3,7 +3,7 @@
 export type EvmWallet = {
     address: string,
     privateKey: string,
-    mnemonic: string,
+    mnemonic?: string,
     nonce?: number
 }
 

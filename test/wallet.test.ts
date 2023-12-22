@@ -62,8 +62,10 @@ describe("Wallet Test", () => {
             const addressBalance = await ethereumWallet.getBalance(SAMPLE_DATA.ETHEREUM.ZERO_ADDRESS)
             const selfBalance = await ethereumWallet.getBalance()
             
-            expect(typeof addressBalance).toBe('object')
-            expect(typeof selfBalance).toBe('object')
+            console.log(selfBalance)
+
+            expect(typeof addressBalance).toBe('bigint')
+            expect(typeof selfBalance).toBe('bigint')
         })
 
         it("getToken()", () => {})
