@@ -3,7 +3,7 @@ import * as bip32 from 'bip32'
 import * as bitcoin from 'bitcoinjs-lib'
 import { PrivateKey } from 'bitcore-lib';
 
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 import { fetchUTXOs } from '../../helper/bitcoinHelper';
 
@@ -203,9 +203,9 @@ class BitCoinWallet {
      */
     getBalance = async (address: string, network?: BtcNetwork): Promise<number> => {
         try {
-            let response
+            let response: AxiosResponse
 
-            switch(network) {
+            switch (network) {
                 case "bitcoin":
                     response = await axios.get(`https://blockchain.info/q/addressbalance/${address}/`)
                     break;
@@ -232,8 +232,27 @@ class BitCoinWallet {
      * @param amount 
      * @returns {any}
      */
-    sendBitcoin = async (receiverAddress: string, amount: number): Promise<any> => {
+    sendBitcoin = async (receiverAddress: string, amount: number, network?: BtcNetwork): Promise<any> => {
         try {
+            let btcNetwork;
+
+            const currentNetwork = network || BTC_MAINNET
+
+            switch (currentNetwork) {
+                case BTC_MAINNET:
+                    btcNetwork = bitcoin.networks.bitcoin;
+                    break;
+                case BTC_REGTEST:
+                    btcNetwork = bitcoin.networks.regtest;
+                    break;
+                case BTC_TESTNET:
+                    btcNetwork = bitcoin.networks.testnet;
+                    break;
+                default:
+                    btcNetwork = bitcoin.networks.bitcoin;
+                    break;
+            }
+
             const response = await axios.get(`https://blockchain.info/unspent?active=${this.address.bech32}`)
             const utxos_1 = response.data.unspent_outputs
 
