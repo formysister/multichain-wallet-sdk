@@ -1,5 +1,5 @@
 import axios from "axios"
-import { BigNumber, ethers } from "ethers"
+import { ethers } from "ethers"
 import { ETHER_GASSTATION_API } from "../../utils/constant"
 import { EvmGasObject } from "../../type/interface"
 
@@ -7,10 +7,10 @@ class Util {
     /**
      * 
      * @param amount 
-     * @returns {BigNumber}
+     * @returns {BigInt}
      */
-    static gweiToWei = (amount: string | number): BigNumber => {
-        const weiValue = ethers.utils.parseUnits(amount.toString(), 'gwei')
+    static gweiToWei = (amount: string | number): BigInt => {
+        const weiValue = ethers.parseUnits(amount.toString(), 'gwei')
         return weiValue
     }
     
@@ -20,8 +20,8 @@ class Util {
      * @returns {String}
      */
     static gweiToEther = (amount: string | number): string => {
-        const weiValue = ethers.utils.parseUnits(amount.toString(), 'gwei')
-        const etherValue = ethers.utils.formatEther(weiValue)
+        const weiValue = ethers.parseUnits(amount.toString(), 'gwei')
+        const etherValue = ethers.formatEther(weiValue)
     
         return etherValue
     }
@@ -32,13 +32,13 @@ class Util {
      * @returns {String}
      */
     static weiToEther = (amount: string | number): string => {
-        const etherValue = ethers.utils.formatEther(amount.toString())
+        const etherValue = ethers.formatEther(amount.toString())
         return etherValue
     }
 
     /**
      * 
-     * @returns {EvmGasObject}
+     * @returns {Promise<EvmGasObject>}
      */
     static getGas = async (): Promise<EvmGasObject> => {
         try {
@@ -81,11 +81,11 @@ class Util {
     /**
      * 
      * @param rpcURL 
-     * @returns {Number}
+     * @returns {Promise<number>}
      */
     static getJsonRPCLatency = async (rpcURL: string): Promise<number> => {
         try {
-            const provider = new ethers.providers.JsonRpcProvider(rpcURL)
+            const provider = new ethers.JsonRpcProvider(rpcURL)
             
             const before = Date.now()
             
@@ -103,11 +103,11 @@ class Util {
     /**
      * 
      * @param rpcURL 
-     * @returns {Number}
+     * @returns {Promise<number>}
      */
     static getWebSocketRPCLatency = async (rpcURL: string): Promise<number> => {
         try {
-            const provider = new ethers.providers.WebSocketProvider(rpcURL)
+            const provider = new ethers.WebSocketProvider(rpcURL)
             
             const before = Date.now()
             
