@@ -61,8 +61,6 @@ describe("Wallet Test", () => {
         it("getBalance()", async () => {
             const addressBalance = await ethereumWallet.getBalance(SAMPLE_DATA.ETHEREUM.ZERO_ADDRESS)
             const selfBalance = await ethereumWallet.getBalance()
-            
-            console.log(selfBalance)
 
             expect(typeof addressBalance).toBe('bigint')
             expect(typeof selfBalance).toBe('bigint')
@@ -107,7 +105,7 @@ describe("Wallet Test", () => {
         let bitcoinWallet: BitcoinWallet
 
         beforeAll(() => {
-            bitcoinWallet = new BitcoinWallet()
+            bitcoinWallet = new BitcoinWallet(SAMPLE_DATA.BITCOIN.SAMPL_PRIVATE_KEY, "testnet")
         })
 
         it("Check Initial wallet data", () => {
@@ -124,7 +122,7 @@ describe("Wallet Test", () => {
         })
 
         it("recoverWallet()", async () => {
-            const wallet = await bitcoinWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC)
+            const wallet = await bitcoinWallet.recoverWallet("luggage flip infant wife pear forest ugly canyon elite one bread finger")
 
             expect(typeof wallet.mnemonic).toBe('string')
             expect(typeof wallet.privateKey).toBe('string')
@@ -132,7 +130,7 @@ describe("Wallet Test", () => {
         })
 
         it("importAccount()", async () => {
-            const recoveredWallet = await bitcoinWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC, "regtest")
+            const recoveredWallet = await bitcoinWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC, "testnet")
             const wallet = await bitcoinWallet.importAccount(recoveredWallet.privateKey, "testnet")
 
             expect(typeof wallet.privateKey).toBe('string')
@@ -140,10 +138,9 @@ describe("Wallet Test", () => {
         })
 
         it("getBalance()", async () => {
-            const balance = await bitcoinWallet.getBalance(SAMPLE_DATA.BITCOIN.TESTNET_ADDRESS, "testnet")
+            const balance = await bitcoinWallet.getBalance("34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo", "bitcoin")
 
-            console.log("balance", balance)
-            // expect(typeof balance).toBe('number')
+            expect(typeof balance).toBe('number')
         })
 
         it("sendBitcoin()", async () => {

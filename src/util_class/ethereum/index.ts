@@ -1,5 +1,5 @@
 import axios from "axios"
-import { ethers } from "ethers"
+import { ethers } from "../../lib/ethers"
 import { ETHER_GASSTATION_API } from "../../utils/constant"
 import { EvmGasObject } from "../../type/interface"
 
