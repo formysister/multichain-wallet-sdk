@@ -1,7 +1,7 @@
 /* eslint-disable */
 
 // import core-packages
-import { Contract, ContractInterface, Interface, InterfaceAbi, ethers } from 'ethers';
+import { Contract, ContractInterface, Interface, InterfaceAbi, ethers } from '../../lib/ethers';
 import { hdkey } from 'ethereumjs-wallet';
 import { mnemonicToSeed } from 'bip39';
 

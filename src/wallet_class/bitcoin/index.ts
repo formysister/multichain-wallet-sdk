@@ -232,7 +232,7 @@ class BitCoinWallet {
      * @param amount 
      * @returns {any}
      */
-    sendBitcoin = async (receiverAddress: string, amount: number, network?: BtcNetwork): Promise<any> => {
+    sendBitcoin = async (recipientAddress: string, amount: number, network?: BtcNetwork): Promise<any> => {
         try {
             let btcNetwork;
 
@@ -254,9 +254,22 @@ class BitCoinWallet {
             }
 
             const response = await axios.get(`https://blockchain.info/unspent?active=${this.address.bech32}`)
-            const utxos_1 = response.data.unspent_outputs
+            const utxos = response.data.unspent_outputs
 
-            return utxos_1
+            const tx = new bitcoin.Transaction()
+
+            if(utxos.length === 0) {
+                tx.addInput(Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex'), 0)
+            }
+            else {
+                tx.addInput(Buffer.from(utxos[utxos.length - 1]['tx_hash'], 'hex'), 0)
+            }
+
+            tx.addOutput(Buffer.from(recipientAddress), amount)
+
+            const txHex = tx.toHex()
+
+            return utxos
         }
         catch (error) {
             throw error

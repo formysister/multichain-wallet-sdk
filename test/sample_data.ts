@@ -10,8 +10,10 @@ const SAMPLE_DATA = {
         SAMPLE_1155_NFT_ADDRESS: "0xA8bf99a3aDA507bCD0a8ce8982d3d94a4896440B"
     },
     BITCOIN: {
+        SAMPL_PRIVATE_KEY: 'Kwn5XLLKgSL7M6hosdQLjp8dEEWUudC4MRY2TTP2UkkQe71g5GCD',
         SAMPLE_ADDRESS: 'bc1qfgf0eukwjslus64vvcqt2l6t7e85hjp3e28lxp',
-        TESTNET_ADDRESS: 'mnGd3ZgszE3BJNH6sxVcvJhNRz3qnXQgS7'
+        TESTNET_ADDRESS_P2PKH: 'mnGd3ZgszE3BJNH6sxVcvJhNRz3qnXQgS7',
+        TESTNET_ADDRESS_BECH32: 'tb1qfgf0eukwjslus64vvcqt2l6t7e85hjp3nvuvaj'
     }
 }
 
