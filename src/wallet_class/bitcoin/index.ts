@@ -5,8 +5,6 @@ import { PrivateKey } from 'bitcore-lib';
 
 import axios, { AxiosResponse } from 'axios';
 
-import { fetchUTXOs } from '../../helper/bitcoinHelper';
-
 import { BtcNetwork, BtcWallet, BtcAccount } from "../../type/type"
 import { BITCOIN_DEFAULT, BTC_MAINNET, BTC_REGTEST, BTC_TESTNET } from "../../constant";
 
@@ -17,8 +15,8 @@ class BitCoinWallet {
 
     /**
      * 
-     * @param privateKey 
-     * @param network 
+     * @param {String} privateKey 
+     * @param {BtcNetwork} network 
      */
     constructor(privateKey?: string, network?: BtcNetwork) {
         if (privateKey) {

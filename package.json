@@ -126,7 +126,7 @@
     "typescript": "^4.7.4",
     "webpack": "^5.74.0"
   },
-  "readme": "readme.md",
+  "readme": "README.md",
   "homepage": "https://github.com/formysister/multichain-wallet-sdk#readme",
   "repository": {
     "url": "https://github.com/formysister/multichain-wallet-sdk"
