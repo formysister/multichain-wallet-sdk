@@ -35,7 +35,7 @@
     "@types/node-fetch": "^2.6.2",
     "@types/stellar-sdk": "^0.15.1",
     "assert": "^2.0.0",
-    "axios": "^0.27.2",
+    "axios": "^1.6.8",
     "bech32": "^2.0.0",
     "bech32-buffer": "^0.2.0",
     "bip173": "^1.1.4",
