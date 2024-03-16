@@ -47,7 +47,7 @@
     "bitcoinjs-lib": "^6.0.2",
     "bitcore-explorers": "^1.0.1",
     "bitcore-lib": "^10.0.5",
-    "bitcore-mnemonic": "^8.25.38",
+    "bitcore-mnemonic": "^10.0.28",
     "bluebird": "^3.7.2",
     "browserify-zlib": "^0.1.4",
     "bs58": "^5.0.0",
