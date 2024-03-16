@@ -266,7 +266,6 @@ class BitCoinWallet {
             tx.addOutput(Buffer.from(recipientAddress), amount)
 
             // const txHex = tx.toHex()
-
             return utxos
         }
         catch (error) {
