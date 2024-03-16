@@ -1,11 +1,3 @@
-import { Ethereum, Solana, Bitcoin, Binance, Common, Stellar, Tron } from "./wallet";
+import { Ethereum } from "./wallet_class"
 
-export = ({
-    Ethereum,
-    Solana,
-    Bitcoin,
-    Binance,
-    Common,
-    Tron,
-    Stellar
-});
+export = ({ Ethereum })

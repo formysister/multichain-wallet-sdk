@@ -1,5 +1,5 @@
 {
-  "name": "vipay-multichain-wallet",
+  "name": "multichain-wallet-sdk",
   "version": "1.4.3",
   "description": "",
   "main": "dist/index.js",
@@ -13,7 +13,7 @@
     "test": "tsdx test"
   },
   "keywords": [],
-  "author": "Chris.Kennedy@theblockjet.ae",
+  "author": "formysister",
   "license": "ISC",
   "dependencies": {
     "@airgap/beacon-sdk": "^3.1.3",
@@ -127,9 +127,9 @@
     "webpack": "^5.74.0"
   },
   "readme": "readme.md",
-  "homepage": "https://github.com/cyber-storm-200712/multichain-wallet-sdk",
+  "homepage": "https://github.com/formysister/multichain-wallet-sdk#readme",
   "repository": {
-    "url": "https://github.com/cyber-storm-200712/multichain-wallet-sdk"
+    "url": "https://github.com/formysister/multichain-wallet-sdk"
   },
   "react-native": {
     "zlib": "browserify-zlib",
