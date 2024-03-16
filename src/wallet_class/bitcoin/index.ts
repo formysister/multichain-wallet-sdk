@@ -229,7 +229,7 @@ class BitCoinWallet {
     /**
      * 
      * @param receiverAddress 
-     * @param amount 
+     * @param amount
      * @returns {any}
      */
     sendBitcoin = async (recipientAddress: string, amount: number, network?: BtcNetwork): Promise<any> => {
