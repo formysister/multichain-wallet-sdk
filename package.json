@@ -111,7 +111,7 @@
     "url": "^0.10.3",
     "util": "^0.10.4",
     "vm-browserify": "0.0.4",
-    "xrpl": "^2.3.0"
+    "xrpl": "^3.0.0"
   },
   "devDependencies": {
     "@airgap/beacon-wallet": "^3.1.3",
