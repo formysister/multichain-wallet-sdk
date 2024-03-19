@@ -27,6 +27,9 @@ jobs:
     - name: Run tests
       run: npm test
     
+    - name: Config NPM access
+      run: npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+      
     - name: Publish package on NPM
       run: npm publish
       env:
