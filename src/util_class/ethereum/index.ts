@@ -1,15 +1,17 @@
 import axios from "axios"
-import { ethers } from "../../lib/ethers"
-import { ETHER_GASSTATION_API } from "../../utils/constant"
+// import { ethers } from "../../lib/ethers"
+import { BigNumberish, ethers } from "ethers"
+
+import { ETHER_GASSTATION_API } from "../../constant"
 import { EvmGasObject } from "../../type/interface"
 
 class Util {
     /**
      * 
      * @param amount 
-     * @returns {BigInt}
+     * @returns {BigNumberish}
      */
-    static gweiToWei = (amount: string | number): BigInt => {
+    static gweiToWei = (amount: string | number): BigNumberish => {
         const weiValue = ethers.parseUnits(amount.toString(), 'gwei')
         return weiValue
     }

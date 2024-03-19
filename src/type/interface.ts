@@ -1,12 +1,12 @@
-import type { BigNumber } from "ethers";
+import type { BigNumberish } from "ethers"
 
 export interface EvmGasObject {
     low: number,
     average: number,
     fast: number,
-    lowWei: BigNumber,
-    averageWei: BigNumber,
-    fastWei: BigNumber,
+    lowWei: BigNumberish | BigInt,
+    averageWei: BigNumberish | BigInt,
+    fastWei: BigNumberish | BigInt,
     lowEth: string;
     averageEth: string;
     fastEth: string;

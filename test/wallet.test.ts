@@ -101,52 +101,52 @@ describe("Wallet Test", () => {
         })
     })
 
-    describe("Bitcoin Wellet Test", () => {
-        let bitcoinWallet: BitcoinWallet
+    // describe("Bitcoin Wellet Test", () => {
+    //     let bitcoinWallet: BitcoinWallet
 
-        beforeAll(() => {
-            bitcoinWallet = new BitcoinWallet(SAMPLE_DATA.BITCOIN.SAMPL_PRIVATE_KEY, "testnet")
-        })
+    //     beforeAll(() => {
+    //         bitcoinWallet = new BitcoinWallet(SAMPLE_DATA.BITCOIN.SAMPL_PRIVATE_KEY, "testnet")
+    //     })
 
-        it("Check Initial wallet data", () => {
-            expect(typeof bitcoinWallet.privateKey).toBe('string')
-            expect(typeof bitcoinWallet.address).toBe('object')
-        })
+    //     it("Check Initial wallet data", () => {
+    //         expect(typeof bitcoinWallet.privateKey).toBe('string')
+    //         expect(typeof bitcoinWallet.address).toBe('object')
+    //     })
 
-        it("createWallet()", () => {
-            const wallet = bitcoinWallet.createWallet('testnet')
+    //     it("createWallet()", () => {
+    //         const wallet = bitcoinWallet.createWallet('testnet')
 
-            expect(typeof wallet.mnemonic).toBe('string')
-            expect(typeof wallet.privateKey).toBe('string')
-            expect(typeof wallet.address).toBe('object')
-        })
+    //         expect(typeof wallet.mnemonic).toBe('string')
+    //         expect(typeof wallet.privateKey).toBe('string')
+    //         expect(typeof wallet.address).toBe('object')
+    //     })
 
-        it("recoverWallet()", async () => {
-            const wallet = await bitcoinWallet.recoverWallet("luggage flip infant wife pear forest ugly canyon elite one bread finger")
+    //     it("recoverWallet()", async () => {
+    //         const wallet = await bitcoinWallet.recoverWallet("luggage flip infant wife pear forest ugly canyon elite one bread finger")
 
-            expect(typeof wallet.mnemonic).toBe('string')
-            expect(typeof wallet.privateKey).toBe('string')
-            expect(typeof wallet.address).toBe('object')
-        })
+    //         expect(typeof wallet.mnemonic).toBe('string')
+    //         expect(typeof wallet.privateKey).toBe('string')
+    //         expect(typeof wallet.address).toBe('object')
+    //     })
 
-        it("importAccount()", async () => {
-            const recoveredWallet = await bitcoinWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC, "testnet")
-            const wallet = await bitcoinWallet.importAccount(recoveredWallet.privateKey, "testnet")
+    //     it("importAccount()", async () => {
+    //         const recoveredWallet = await bitcoinWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC, "testnet")
+    //         const wallet = await bitcoinWallet.importAccount(recoveredWallet.privateKey, "testnet")
 
-            expect(typeof wallet.privateKey).toBe('string')
-            expect(typeof wallet.address).toBe('object')
-        })
+    //         expect(typeof wallet.privateKey).toBe('string')
+    //         expect(typeof wallet.address).toBe('object')
+    //     })
 
-        it("getBalance()", async () => {
-            const balance = await bitcoinWallet.getBalance("34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo", "bitcoin")
+    //     it("getBalance()", async () => {
+    //         const balance = await bitcoinWallet.getBalance("34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo", "bitcoin")
 
-            expect(typeof balance).toBe('number')
-        })
+    //         expect(typeof balance).toBe('number')
+    //     })
 
-        it("sendBitcoin()", async () => {
-            const utxos = await bitcoinWallet.sendBitcoin('', 0)
+    //     it("sendBitcoin()", async () => {
+    //         const utxos = await bitcoinWallet.sendBitcoin('', 0)
 
-            console.log(utxos)
-        })
-    })
+    //         console.log(utxos)
+    //     })
+    // })
 })

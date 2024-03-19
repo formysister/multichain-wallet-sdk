@@ -1,7 +1,8 @@
 /* eslint-disable */
 
 // import core-packages
-import { Contract, ContractInterface, Interface, InterfaceAbi, ethers } from '../../lib/ethers';
+import { BigNumberish, Contract, InterfaceAbi, ethers } from 'ethers';
+
 import { hdkey } from 'ethereumjs-wallet';
 import { mnemonicToSeed } from 'bip39';
 
@@ -154,9 +155,9 @@ class EthereumWallet {
     /**
      * 
      * @param address 
-     * @returns {Promise<BigInt>}
+     * @returns {Promise<BigNumberish>}
      */
-    getBalance = async (address?: string): Promise<BigInt> => {
+    getBalance = async (address?: string): Promise<BigNumberish> => {
         const balance = await this.provider.getBalance(address || this.address);
         return balance
     }
@@ -291,7 +292,7 @@ class EthereumWallet {
      * @param amount 
      * @param gasPrice 
      * @param gasLimit 
-     * @returns {Promise<ethers.TransactionResponse>}
+     * @returns {Promise<ethers.Transaction>}
      */
     sendEther = async (receiveAddress: string, amount: string, gasPrice?: any, gasLimit?: any): Promise<ethers.TransactionResponse> => {
         try {
@@ -326,13 +327,13 @@ class EthereumWallet {
      * @param amount 
      * @param gasPrice 
      * @param gasLimit 
-     * @returns {Promise<ethers.TransactionResponse>}
+     * @returns {Promise<ethers.Transaction>}
      */
-    tokenApprove = async (tokenAddress: string, amount: string, receiveAddress: string, gasPrice?: any, gasLimit?: any): Promise<ethers.TransactionResponse> => {
+    tokenApprove = async (tokenAddress: string, amount: string, receiveAddress: string, gasPrice?: any, gasLimit?: any): Promise<ethers.Transaction> => {
         const contract = new ethers.Contract(tokenAddress, erc20ABI, this.signer);
     
         try {
-            let tx: ethers.TransactionResponse;
+            let tx: ethers.Transaction;
     
             if(gasPrice && gasLimit) {
                 tx = await contract.approve(receiveAddress, amount, { gasPrice: gasPrice, gasLimit: gasLimit });
@@ -354,13 +355,13 @@ class EthereumWallet {
      * @param receiveAddress 
      * @param gasPrice 
      * @param gasLimit 
-     * @returns {Promise<ethers.TransactionResponse>}
+     * @returns {Promise<ethers.Transaction>}
      */
-    tokenTransfer = async (tokenAddress: string, amount: any, receiveAddress: string, gasPrice?: any, gasLimit?: any): Promise<ethers.TransactionResponse> => {
+    tokenTransfer = async (tokenAddress: string, amount: any, receiveAddress: string, gasPrice?: any, gasLimit?: any): Promise<ethers.Transaction> => {
         const contract = new ethers.Contract(tokenAddress, erc20ABI, this.signer);
     
         try {
-            let tx: ethers.TransactionResponse;
+            let tx: ethers.Transaction;
             if(gasPrice && gasLimit) {
                 tx = await contract.transfer(receiveAddress, amount, { gasPrice, gasLimit });
             }
@@ -466,7 +467,7 @@ class EthereumWallet {
      * @param abi 
      * @returns {Contract}
      */
-    getContract = (address: string, abi: Interface | InterfaceAbi): Contract => {
+    getContract = (address: string, abi: InterfaceAbi): Contract => {
         const contract = new ethers.Contract(address, abi, this.provider)
 
         return contract
