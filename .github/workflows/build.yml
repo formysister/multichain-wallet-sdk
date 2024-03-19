@@ -1,4 +1,4 @@
-name: Build
+name: Build & Rlease
 
 on:
   push:
@@ -26,3 +26,8 @@ jobs:
 
     - name: Run tests
       run: npm test
+    
+    - name: Publish package on NPM
+      run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
