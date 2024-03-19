@@ -88,7 +88,7 @@
     "react-native-randombytes": "^3.0.0",
     "react-native-tcp": "^3.2.1",
     "react-native-udp": "^2.1.0",
-    "readable-stream": "^1.0.33",
+    "readable-stream": "^4.5.2",
     "ripple-bip32": "^0.0.3",
     "ripple-keypairs": "^1.1.4",
     "ripple-lib": "^1.10.1",
