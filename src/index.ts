@@ -1,3 +1,4 @@
-import { Ethereum } from "./wallet_class"
+import { EthereumWallet } from "./wallet_class"
 
-export = ({ Ethereum })
+// export = ({ EthereumWallet })
+export { EthereumWallet }

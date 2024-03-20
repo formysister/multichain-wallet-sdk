@@ -1,5 +1,6 @@
-import EthereumWallet from '../src/wallet_class/ethereum'
-import BitcoinWallet from '../src/wallet_class/bitcoin'
+// import EthereumWallet from '../src/wallet_class/ethereum'
+import { EthereumWallet } from "../src"
+// import BitcoinWallet from '../src/wallet_class/bitcoin'
 import SAMPLE_DATA from './sample_data'
 
 jest.setTimeout(50000)
