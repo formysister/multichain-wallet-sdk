@@ -100,6 +100,11 @@ describe("Wallet Test", () => {
             expect(isERC1155NFT_true).toBe(true)
             expect(isERC1155NFT_false).toBe(false)
         })
+
+        it("Util", async () => {
+            const latency =  await ethereumWallet.util.getJsonRPCLatency('https://goerli.infura.io/v3/60d0fc034847460da68aa4501df5fe57')
+            expect(typeof latency).toBe('number')
+        })
     })
 
     // describe("Bitcoin Wellet Test", () => {

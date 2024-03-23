@@ -11,7 +11,7 @@ class Util {
      * @param amount 
      * @returns {BigNumberish}
      */
-    static gweiToWei = (amount: string | number): BigNumberish => {
+    gweiToWei = (amount: string | number): BigNumberish => {
         const weiValue = ethers.parseUnits(amount.toString(), 'gwei')
         return weiValue
     }
@@ -21,7 +21,7 @@ class Util {
      * @param amount 
      * @returns {String}
      */
-    static gweiToEther = (amount: string | number): string => {
+    gweiToEther = (amount: string | number): string => {
         const weiValue = ethers.parseUnits(amount.toString(), 'gwei')
         const etherValue = ethers.formatEther(weiValue)
     
@@ -33,7 +33,7 @@ class Util {
      * @param amount 
      * @returns {String}
      */
-    static weiToEther = (amount: string | number): string => {
+    weiToEther = (amount: string | number): string => {
         const etherValue = ethers.formatEther(amount.toString())
         return etherValue
     }
@@ -42,50 +42,50 @@ class Util {
      * 
      * @returns {Promise<EvmGasObject>}
      */
-    static getGas = async (): Promise<EvmGasObject> => {
-        try {
-            const gasResponse = await axios.get(ETHER_GASSTATION_API)
-            const estimatedGas =  gasResponse.data
+    // getGas = async (): Promise<EvmGasObject> => {
+    //     try {
+    //         const gasResponse = await axios.get(ETHER_GASSTATION_API)
+    //         const estimatedGas =  gasResponse.data
     
-            const low = Number(estimatedGas.safeLow / 10)
-            const average = Number(estimatedGas.average / 10)
-            const fast = Number(estimatedGas.fast / 10)
-            const lowWei = await this.gweiToWei(low)
-            const averageWei = await this.gweiToWei(average)
-            const fastWei = await this.gweiToWei(fast)
-            const lowEth = await this.gweiToEther(low)
-            const averageEth = await this.gweiToEther(average)
-            const fastEth = await this.gweiToEther(fast)
-            const safeLowWaitMin = estimatedGas.safeLowWait;
-            const avgWaitMin = estimatedGas.avgWait;
-            const fastWaitMin = estimatedGas.fastWait;
+    //         const low = Number(estimatedGas.safeLow / 10)
+    //         const average = Number(estimatedGas.average / 10)
+    //         const fast = Number(estimatedGas.fast / 10)
+    //         const lowWei = await this.gweiToWei(low)
+    //         const averageWei = await this.gweiToWei(average)
+    //         const fastWei = await this.gweiToWei(fast)
+    //         const lowEth = await this.gweiToEther(low)
+    //         const averageEth = await this.gweiToEther(average)
+    //         const fastEth = await this.gweiToEther(fast)
+    //         const safeLowWaitMin = estimatedGas.safeLowWait;
+    //         const avgWaitMin = estimatedGas.avgWait;
+    //         const fastWaitMin = estimatedGas.fastWait;
     
-            return {
-                low,
-                average,
-                fast,
-                lowWei,
-                averageWei,
-                fastWei,
-                lowEth,
-                averageEth,
-                fastEth,
-                safeLowWaitMin,
-                avgWaitMin,
-                fastWaitMin
-            }
-        }
-        catch (error) {
-            throw error
-        }
-    }
+    //         return {
+    //             low,
+    //             average,
+    //             fast,
+    //             lowWei,
+    //             averageWei,
+    //             fastWei,
+    //             lowEth,
+    //             averageEth,
+    //             fastEth,
+    //             safeLowWaitMin,
+    //             avgWaitMin,
+    //             fastWaitMin
+    //         }
+    //     }
+    //     catch (error) {
+    //         throw error
+    //     }
+    // }
 
     /**
      * 
      * @param rpcURL 
      * @returns {Promise<number>}
      */
-    static getJsonRPCLatency = async (rpcURL: string): Promise<number> => {
+    getJsonRPCLatency = async (rpcURL: string): Promise<number> => {
         try {
             const provider = new ethers.JsonRpcProvider(rpcURL)
             
@@ -107,7 +107,7 @@ class Util {
      * @param rpcURL 
      * @returns {Promise<number>}
      */
-    static getWebSocketRPCLatency = async (rpcURL: string): Promise<number> => {
+    getWebSocketRPCLatency = async (rpcURL: string): Promise<number> => {
         try {
             const provider = new ethers.WebSocketProvider(rpcURL)
             

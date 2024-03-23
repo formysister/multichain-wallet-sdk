@@ -30,8 +30,7 @@ class EthereumWallet {
     address: string
     signer: ethers.Wallet
 
-    // Utility helper library
-    Util: Util = Util
+    util: Util = new Util()
 
     /**
      * 
@@ -39,15 +38,17 @@ class EthereumWallet {
      * @param privateKey 
      */
     constructor(rpcUrl: string, privateKey?: string) {
+        // this.util = new Util()
+
         this.provider = new ethers.JsonRpcProvider(rpcUrl)
-        
+
         this.provider.getNetwork().then(network => {
             this.chainId = network.chainId
         }).catch(() => {
             this.chainId = 0
         })
 
-        if(privateKey) {
+        if (privateKey) {
             this.signer = new ethers.Wallet(privateKey, this.provider)
             this.privateKey = privateKey
             this.address = this.signer.address
@@ -68,7 +69,7 @@ class EthereumWallet {
      */
     createWallet = (nonce?: number): EvmWallet => {
         const index = nonce || Math.floor(Math.random() * 10);
-    
+
         const wallet = ethers.Wallet.createRandom();
 
         return {
@@ -87,9 +88,9 @@ class EthereumWallet {
      * @returns {EvmWallet}
      */
     recoverWallet = (mnemonic: string, nonce?: number): EvmWallet => {
-    
+
         const index = nonce || 0;
-    
+
         const wallet = ethers.Wallet.fromPhrase(mnemonic);
 
         return {
@@ -110,7 +111,7 @@ class EthereumWallet {
             const seed = await mnemonicToSeed(mnemonic);
             return seed;
         }
-        catch(error) {
+        catch (error) {
             throw error
         }
     }
@@ -127,13 +128,13 @@ class EthereumWallet {
             const wallet = hdWallet.derivePath(ETHEREUM_DEFAULT + (nonce || 0)).getWallet();
             const address = `0x${wallet.getAddress().toString('hex')}`;
             const privateKey = wallet.getPrivateKey().toString('hex');
-        
+
             return {
                 address: address,
                 privateKey: privateKey
             };
         }
-        catch(error) {
+        catch (error) {
             throw error
         }
     }
@@ -145,7 +146,7 @@ class EthereumWallet {
      */
     importAccount = (privateKey: string): EvmAccount => {
         const account = new ethers.Wallet(privateKey);
-    
+
         return {
             address: account.address,
             privateKey: account.privateKey
@@ -187,7 +188,7 @@ class EthereumWallet {
         }
         else {
             const isNFT = await this.isNftContract(tokenAddress)
-            if(isNFT.tokenType === 'ERC721') {
+            if (isNFT.tokenType === 'ERC721') {
                 contract = new ethers.Contract(tokenAddress, ecr721ABI, this.provider)
 
                 try {
@@ -198,7 +199,7 @@ class EthereumWallet {
                         contract.totalSupply(),
                         contract.balanceOf(address || this.address)
                     ]);
-    
+
                     tokenDetail = {
                         name: name,
                         symbol: symbol,
@@ -221,9 +222,9 @@ class EthereumWallet {
                         contract.symbol(),
                         contract.decimals(),
                         contract.totalSupply(),
-                        tokenId ? contract.balanceOf(address || this.address, tokenId) : () =>  { return 0 }
+                        tokenId ? contract.balanceOf(address || this.address, tokenId) : () => { return 0 }
                     ]);
-    
+
                     tokenDetail = {
                         name: name,
                         symbol: symbol,
@@ -239,7 +240,7 @@ class EthereumWallet {
             }
             else {
                 contract = new ethers.Contract(tokenAddress, erc20ABI, this.provider)
-    
+
                 try {
                     const [name, symbol, decimals, totalSupply, balance] = await Promise.all([
                         contract.name(),
@@ -248,7 +249,7 @@ class EthereumWallet {
                         contract.totalSupply(),
                         contract.balanceOf(address || this.address)
                     ]);
-    
+
                     tokenDetail = {
                         name: name,
                         symbol: symbol,
@@ -276,9 +277,9 @@ class EthereumWallet {
     getTokenBalance = async (tokenAddress: string, address?: string): Promise<BigInt> => {
         try {
             const contract = new ethers.Contract(tokenAddress, erc20ABI, this.provider);
-    
+
             const balance = await contract.balanceOf(address || this.address)
-    
+
             return balance
         }
         catch (error) {
@@ -298,7 +299,7 @@ class EthereumWallet {
         try {
             let tx: ethers.TransactionResponse;
 
-            if(gasPrice && gasLimit) {
+            if (gasPrice && gasLimit) {
                 tx = await this.signer.sendTransaction({
                     to: receiveAddress,
                     value: ethers.parseUnits(amount),
@@ -331,17 +332,17 @@ class EthereumWallet {
      */
     tokenApprove = async (tokenAddress: string, amount: string, receiveAddress: string, gasPrice?: any, gasLimit?: any): Promise<ethers.Transaction> => {
         const contract = new ethers.Contract(tokenAddress, erc20ABI, this.signer);
-    
+
         try {
             let tx: ethers.Transaction;
-    
-            if(gasPrice && gasLimit) {
+
+            if (gasPrice && gasLimit) {
                 tx = await contract.approve(receiveAddress, amount, { gasPrice: gasPrice, gasLimit: gasLimit });
             }
             else {
                 tx = await contract.approve(receiveAddress, amount);
             }
-    
+
             return tx
         } catch (error) {
             throw error
@@ -359,10 +360,10 @@ class EthereumWallet {
      */
     tokenTransfer = async (tokenAddress: string, amount: any, receiveAddress: string, gasPrice?: any, gasLimit?: any): Promise<ethers.Transaction> => {
         const contract = new ethers.Contract(tokenAddress, erc20ABI, this.signer);
-    
+
         try {
             let tx: ethers.Transaction;
-            if(gasPrice && gasLimit) {
+            if (gasPrice && gasLimit) {
                 tx = await contract.transfer(receiveAddress, amount, { gasPrice, gasLimit });
             }
             else {
@@ -407,11 +408,11 @@ class EthereumWallet {
             const isERC721NFT = await this.isERC721NFT(address)
             const isERC1155NFT = await this.isERC1155NFT(address)
 
-            if(isERC721NFT) {
+            if (isERC721NFT) {
                 isNFT = true
                 tokenType = 'ERC721'
             }
-            else if(isERC1155NFT) {
+            else if (isERC1155NFT) {
                 isNFT = true
                 tokenType = 'ERC1155'
             }
@@ -422,7 +423,7 @@ class EthereumWallet {
 
             return { isNFT, tokenType }
         }
-        catch(error) {
+        catch (error) {
             throw error
         }
     }
@@ -437,7 +438,7 @@ class EthereumWallet {
 
         try {
             const is721NFT = await contract.supportsInterface(ERC721_INTERFACE_ID);
-            if(is721NFT) return true
+            if (is721NFT) return true
             else return false
         } catch {
             return false;
@@ -454,7 +455,7 @@ class EthereumWallet {
 
         try {
             const is1155NFT = await contract.supportsInterface(ERC1155_INTERFACE_ID);
-            if(is1155NFT) return true
+            if (is1155NFT) return true
             else return false
         } catch {
             return false;
