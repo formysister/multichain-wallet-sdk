@@ -1,121 +1,63 @@
-# 👷‍♂️🚧 This library is under construction 🚧👷‍♂️ 
-## multichain-wallet-sdk  [multichain wallet development kit]
+# 👷‍♂️🚧 This library is under construction 🚧👷‍♂️
 
-<span>⚠ Old version package was deprecated from NPM. New one will be published. ⚠</span>
+## multichain-wallet-sdk [multichain wallet development kit]
+  
 
 ### installation
-```
-npm install vipay-multichain-wallet
-```
-### import (es5)
-```javascript
-const vipay = require('vipay-multichain-wallet');
-```
-### import (es6)
-```javascript
-import vipay from 'vipay-multichain-wallet';
+
 ```
 
-### Create Wallet (Phrase words) using `common` function
+npm install multichain-wallet-sdk
+
+```
+
+### import example (es5)
+
 ```javascript
-const mnemonic = vipay.Common.generateMnemonic();
-console.log(mnemonic); //sea gulp tiger cup zoo ...
+
+const { EthereumWallet } =  require('multichain-wallet-sdk');
+
+```
+
+### import example (es6)
+
+```javascript
+
+import { EthereumWallet } from  'multichain-wallet-sdk';
+
 ```
 
 ### functions (ethereum)
-- Create Wallet
+
+- Create wallet
+
 - Recover wallet from phrase words
-- Import account from private key
-- Get ETH balance
+
+- Create master seed from mnemonic
+
+- Create account
+
+- Get token detail
+
+- Get token balance
+
 - Send ETH
-- Approve/Transfer Token
 
-### usage (ethereum)
-```javascript
-//Create Wallet
-const wallet = await vipay.Ethereum.createWallet({});
+- Token approve
 
-//Import Wallet
-const wallet = await vipay.Ethereum.importWallet({
-	mnemonic: 'sea glup tiger cup zoo ...', //phrase words
-});
+- Token transfer
 
-//Import Account
-const account = await vipay.Ethereum.importAccount({
-	privateKey: '0x....' //private key
-});
-
-//Get ETH balance
-const balance = await vipay.Ethereum.getBalance({
-	defaultProviderRpcUrl: 'https://https://bsc-dataseed1.defibit.io/', //this is bsc mainnet rpc url (put any ethereum network rpc url here)
-	address: '0x...'
-});
-
-//Send ETH
-const tx = await vipay.Ethereum.sendEther({
-	rpcUrl: 'https://....',// (pur rpc url here)
-	privateKey: '0x....',
-	receiveAddress: '0x...',
-	amount: '0.1', //ETH amount
-	gasPrice: 'xxx', //transaction gas fee
-	gasLimit: 'xxx', //gas limit
-});
-
-//Token Transfer
-const tx = await vipay.Ethereum.tokenTransfer({
-	rpcUrl: 'https://....',// (pur rpc url here)
-	privateKey: '0x....',
-	receiveAddress: '0x...',
-	tokenAddress: '0x...',
-	amount: '0.1', //Token amount
-	gasPrice: 'xxx', //transaction gas fee
-	gasLimit: 'xxx', //gas limit
-});
-
-//Token Approve
-const tx = await vipay.Ethereum.tokenApprove({
-	rpcUrl: 'https://....',// (pur rpc url here)
-	privateKey: '0x....',
-	receiveAddress: '0x...',
-	tokenAddress: '0x...',
-	amount: '0.1', //Token amount
-	gasPrice: 'xxx', //transaction gas fee
-	gasLimit: 'xxx', //gas limit
-})
-```
-
-### functions (solana)
-- Create Wallet
-- Recover wallet from phrase words
-- Import account from private key
-- Send SOL token
-- Get token info
-- Get availale token list
-- Get balance
-- Get transaction
-
-### usage (solana)
-```javascript
-const wallet = await vipay.Solana.createWallet({});
-
-const importWallet = await vipay.Solana.importWallet({
-	mnemonic: 'xxx'//mnemonic
-})
-
-const importAccount = await vipay.Solana.importWallet({
-	privateKey: 'xxx' //privatekey
-})
-
-const tx = await vipay.Solana.transfer({
-	rpcUrl: 'https://api.devnet.solana.com', //rpcurl
-	privateKey: 'xxx',
-	from: 'xxx',
-	to: 'xxx',
-	amount: 0.1
-})
-
-// please refer library for more functions
-```
+- Check address is contract address (util function)
+- Check contract is NFT contract (util function)
+- Check contract is ERC721 NFT (util function)
+- Check contract is ERC1155 NFT (util function)
+- Get contract object from address and ABI interface(util function)
+- Convert GWEI to WEI (util function)
+- Convert GWEI to ETH (util function)
+- Convert WEI to ETH (util function)
+- Get latency of JSON RPC endpoint (util function)
+- GET latency of websocket endpoint (util function)
+  
 
 ### More blockchains and networks will be added.
 
