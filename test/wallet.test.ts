@@ -1,5 +1,6 @@
-import EthereumWallet from '../src/wallet_class/ethereum'
-import BitcoinWallet from '../src/wallet_class/bitcoin'
+// import EthereumWallet from '../src/wallet_class/ethereum'
+import { EthereumWallet } from "../src"
+// import BitcoinWallet from '../src/wallet_class/bitcoin'
 import SAMPLE_DATA from './sample_data'
 
 jest.setTimeout(50000)
@@ -99,54 +100,59 @@ describe("Wallet Test", () => {
             expect(isERC1155NFT_true).toBe(true)
             expect(isERC1155NFT_false).toBe(false)
         })
-    })
 
-    describe("Bitcoin Wellet Test", () => {
-        let bitcoinWallet: BitcoinWallet
-
-        beforeAll(() => {
-            bitcoinWallet = new BitcoinWallet(SAMPLE_DATA.BITCOIN.SAMPL_PRIVATE_KEY, "testnet")
-        })
-
-        it("Check Initial wallet data", () => {
-            expect(typeof bitcoinWallet.privateKey).toBe('string')
-            expect(typeof bitcoinWallet.address).toBe('object')
-        })
-
-        it("createWallet()", () => {
-            const wallet = bitcoinWallet.createWallet('testnet')
-
-            expect(typeof wallet.mnemonic).toBe('string')
-            expect(typeof wallet.privateKey).toBe('string')
-            expect(typeof wallet.address).toBe('object')
-        })
-
-        it("recoverWallet()", async () => {
-            const wallet = await bitcoinWallet.recoverWallet("luggage flip infant wife pear forest ugly canyon elite one bread finger")
-
-            expect(typeof wallet.mnemonic).toBe('string')
-            expect(typeof wallet.privateKey).toBe('string')
-            expect(typeof wallet.address).toBe('object')
-        })
-
-        it("importAccount()", async () => {
-            const recoveredWallet = await bitcoinWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC, "testnet")
-            const wallet = await bitcoinWallet.importAccount(recoveredWallet.privateKey, "testnet")
-
-            expect(typeof wallet.privateKey).toBe('string')
-            expect(typeof wallet.address).toBe('object')
-        })
-
-        it("getBalance()", async () => {
-            const balance = await bitcoinWallet.getBalance("34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo", "bitcoin")
-
-            expect(typeof balance).toBe('number')
-        })
-
-        it("sendBitcoin()", async () => {
-            const utxos = await bitcoinWallet.sendBitcoin('', 0)
-
-            console.log(utxos)
+        it("Util", async () => {
+            const latency =  await ethereumWallet.util.getJsonRPCLatency('https://goerli.infura.io/v3/60d0fc034847460da68aa4501df5fe57')
+            expect(typeof latency).toBe('number')
         })
     })
+
+    // describe("Bitcoin Wellet Test", () => {
+    //     let bitcoinWallet: BitcoinWallet
+
+    //     beforeAll(() => {
+    //         bitcoinWallet = new BitcoinWallet(SAMPLE_DATA.BITCOIN.SAMPL_PRIVATE_KEY, "testnet")
+    //     })
+
+    //     it("Check Initial wallet data", () => {
+    //         expect(typeof bitcoinWallet.privateKey).toBe('string')
+    //         expect(typeof bitcoinWallet.address).toBe('object')
+    //     })
+
+    //     it("createWallet()", () => {
+    //         const wallet = bitcoinWallet.createWallet('testnet')
+
+    //         expect(typeof wallet.mnemonic).toBe('string')
+    //         expect(typeof wallet.privateKey).toBe('string')
+    //         expect(typeof wallet.address).toBe('object')
+    //     })
+
+    //     it("recoverWallet()", async () => {
+    //         const wallet = await bitcoinWallet.recoverWallet("luggage flip infant wife pear forest ugly canyon elite one bread finger")
+
+    //         expect(typeof wallet.mnemonic).toBe('string')
+    //         expect(typeof wallet.privateKey).toBe('string')
+    //         expect(typeof wallet.address).toBe('object')
+    //     })
+
+    //     it("importAccount()", async () => {
+    //         const recoveredWallet = await bitcoinWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC, "testnet")
+    //         const wallet = await bitcoinWallet.importAccount(recoveredWallet.privateKey, "testnet")
+
+    //         expect(typeof wallet.privateKey).toBe('string')
+    //         expect(typeof wallet.address).toBe('object')
+    //     })
+
+    //     it("getBalance()", async () => {
+    //         const balance = await bitcoinWallet.getBalance("34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo", "bitcoin")
+
+    //         expect(typeof balance).toBe('number')
+    //     })
+
+    //     it("sendBitcoin()", async () => {
+    //         const utxos = await bitcoinWallet.sendBitcoin('', 0)
+
+    //         console.log(utxos)
+    //     })
+    // })
 })

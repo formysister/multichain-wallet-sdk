@@ -1,2 +1,3 @@
-export * as Ethereum from "./ethereum"
-export * as Bitcoin from "./bitcoin"
+import EthereumWallet from "./ethereum"
+
+export { EthereumWallet }
