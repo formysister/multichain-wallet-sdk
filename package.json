@@ -125,7 +125,7 @@
     "esbuild": "^0.15.5",
     "jest": "^28.1.3",
     "simple-bitcoin-wallet": "0.0.9",
-    "typescript": "^4.7.4",
+    "typescript": "^5.4.3",
     "webpack": "^5.74.0"
   },
   "readme": "README.md",
