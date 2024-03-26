@@ -1,6 +1,5 @@
 // import EthereumWallet from '../src/wallet_class/ethereum'
-import { EthereumWallet } from "../src"
-// import BitcoinWallet from '../src/wallet_class/bitcoin'
+import { EthereumWallet, SolanaWallet } from "../src"
 import SAMPLE_DATA from './sample_data'
 
 jest.setTimeout(50000)
@@ -8,7 +7,7 @@ jest.setTimeout(50000)
 describe("Wallet Test", () => {
     describe("Ethereum Wallet Test", () => {
         let ethereumWallet: EthereumWallet;
-        
+
         beforeAll(() => {
             ethereumWallet = new EthereumWallet(SAMPLE_DATA.ETHEREUM.GOERLI_RPC)
         })
@@ -16,12 +15,11 @@ describe("Wallet Test", () => {
         it("Check Initial wallet data", () => {
             expect(typeof ethereumWallet.privateKey).toBe('string')
             expect(typeof ethereumWallet.address).toBe('string')
-            expect(typeof ethereumWallet.chainId).toBe('number')
         })
 
         it("createWallet()", () => {
             const wallet = ethereumWallet.createWallet()
-            
+
             expect(typeof wallet.mnemonic).toBe('string')
             expect(typeof wallet.privateKey).toBe('string')
             expect(typeof wallet.address).toBe('string')
@@ -67,15 +65,15 @@ describe("Wallet Test", () => {
             expect(typeof selfBalance).toBe('bigint')
         })
 
-        it("getToken()", () => {})
+        it("getToken()", () => { })
 
-        it("getTokenBalance()", () => {})
+        it("getTokenBalance()", () => { })
 
-        it("sendEther()", () => {})
+        it("sendEther()", () => { })
 
-        it("tokenApprove()", () => {})
+        it("tokenApprove()", () => { })
 
-        it("tokenTransfer()", () => {})
+        it("tokenTransfer()", () => { })
 
         it("isContractAddress()", async () => {
             const isContractAddress_true = await ethereumWallet.isContractAddress(SAMPLE_DATA.ETHEREUM.SAMPLE_TOKEN_ADDRESS)
@@ -102,8 +100,62 @@ describe("Wallet Test", () => {
         })
 
         it("Util", async () => {
-            const latency =  await ethereumWallet.util.getJsonRPCLatency('https://goerli.infura.io/v3/60d0fc034847460da68aa4501df5fe57')
+            const latency = await ethereumWallet.util.getJsonRPCLatency('https://goerli.infura.io/v3/60d0fc034847460da68aa4501df5fe57')
+            
             expect(typeof latency).toBe('number')
+        })
+    })
+
+    describe("Solana Wallet Test", () => {
+        let solanaWallet: SolanaWallet
+
+        beforeAll(async () => {
+            solanaWallet = new SolanaWallet(SAMPLE_DATA.SOLANA.SOLANA_MAINNET_RPC_URL)
+            await solanaWallet.initialize()
+        })
+
+        it("Create Wallet", async () => {
+            const wallet = await solanaWallet.createWallet()
+            expect(typeof wallet).toBe("object")
+        })
+
+        it("Recover Wallet", async () => {
+            const wallet = await solanaWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC)
+            expect(typeof wallet).toBe("object")
+        })
+
+        it("Create Account", async () => {
+            const account = await solanaWallet.createAccount()            
+            expect(typeof account.privateKey).toBe("string")
+        })
+
+        it("Import Account", async () => {
+            const account = await solanaWallet.importAccount(solanaWallet.privateKey)            
+            expect(account.address.toLowerCase()).toBe(solanaWallet.address.toLowerCase())
+        })
+
+        it("Get Balance", async () => {
+            const solBalance = await solanaWallet.getBalance("9DSRMyr3EfxPzxZo9wMBPku7mvcazHTHfyjhcfw5yucA")
+
+            const tokenBalance = await solanaWallet.getBalance(
+                "9DSRMyr3EfxPzxZo9wMBPku7mvcazHTHfyjhcfw5yucA",
+                "ETAtLmCmsoiEEKfNrHKJ2kYy3MoABhU6NQvpSfij5tDs"
+            )
+
+            expect(typeof solBalance).toBe("number")
+            expect(typeof tokenBalance).toBe("number")
+        })
+
+        it("Get token list", async () => {
+            const tokenList = await solanaWallet.getTokenList("mainnet-beta")
+            
+            expect(typeof tokenList).toBe("object")
+        })
+
+        it("Get token detail", async () => {
+            const tokenDetail = await solanaWallet.getTokenInfo("mainnet-beta", "ETAtLmCmsoiEEKfNrHKJ2kYy3MoABhU6NQvpSfij5tDs")
+
+            expect(typeof tokenDetail).toBe("object")
         })
     })
 

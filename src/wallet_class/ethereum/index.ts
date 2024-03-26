@@ -22,15 +22,16 @@ import { EvmWallet, EvmAccount, EvmTokenDetail, ERCTokenType, IsNFT } from '../.
 
 class EthereumWallet {
     // Network data
+    rpcUrl: string
     provider: ethers.JsonRpcProvider
-    chainId: number | BigInt = 0
+    // chainId: number | BigInt = 0
 
     // Wallet main data
     privateKey: string
     address: string
     signer: ethers.Wallet
 
-    util: Util = new Util()
+    util: Util
 
     /**
      * 
@@ -38,15 +39,10 @@ class EthereumWallet {
      * @param privateKey 
      */
     constructor(rpcUrl: string, privateKey?: string) {
-        // this.util = new Util()
+        this.util = new Util()
 
+        this.rpcUrl = rpcUrl
         this.provider = new ethers.JsonRpcProvider(rpcUrl)
-
-        this.provider.getNetwork().then(network => {
-            this.chainId = network.chainId
-        }).catch(() => {
-            this.chainId = 0
-        })
 
         if (privateKey) {
             this.signer = new ethers.Wallet(privateKey, this.provider)
@@ -126,13 +122,13 @@ class EthereumWallet {
         try {
             const hdWallet = await hdkey.fromMasterSeed(rootSeed);
             const wallet = hdWallet.derivePath(ETHEREUM_DEFAULT + (nonce || 0)).getWallet();
-            const address = `0x${wallet.getAddress().toString('hex')}`;
-            const privateKey = wallet.getPrivateKey().toString('hex');
+            const address = `0x${wallet.getAddress().toString('hex')}`
+            const privateKey = wallet.getPrivateKey().toString('hex')
 
             return {
                 address: address,
                 privateKey: privateKey
-            };
+            }
         }
         catch (error) {
             throw error
@@ -145,7 +141,7 @@ class EthereumWallet {
      * @returns {EvmAccount}
      */
     importAccount = (privateKey: string): EvmAccount => {
-        const account = new ethers.Wallet(privateKey);
+        const account = new ethers.Wallet(privateKey)
 
         return {
             address: account.address,
@@ -159,7 +155,7 @@ class EthereumWallet {
      * @returns {Promise<BigNumberish>}
      */
     getBalance = async (address?: string): Promise<BigNumberish> => {
-        const balance = await this.provider.getBalance(address || this.address);
+        const balance = await this.provider.getBalance(address || this.address)
         return balance
     }
 
@@ -276,7 +272,7 @@ class EthereumWallet {
      */
     getTokenBalance = async (tokenAddress: string, address?: string): Promise<BigInt> => {
         try {
-            const contract = new ethers.Contract(tokenAddress, erc20ABI, this.provider);
+            const contract = new ethers.Contract(tokenAddress, erc20ABI, this.provider)
 
             const balance = await contract.balanceOf(address || this.address)
 
@@ -375,7 +371,7 @@ class EthereumWallet {
         }
     }
 
-    /* util function  */
+    /* util function */
 
     /**
      * 
