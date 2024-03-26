@@ -1,5 +1,12 @@
 // Evm Types
 
+export type Wallet = {
+    address: string,
+    privateKey: string,
+    mnemonic?: string,
+    nonce?: number
+}
+
 export type EvmWallet = {
     address: string,
     privateKey: string,

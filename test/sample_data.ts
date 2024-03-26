@@ -9,6 +9,11 @@ const SAMPLE_DATA = {
         SAMPLE_721_NFT_ADDRESS: "0x7EC3f3CE817F5A5CA3e285022573Df1b1B4DeF7d",
         SAMPLE_1155_NFT_ADDRESS: "0xA8bf99a3aDA507bCD0a8ce8982d3d94a4896440B"
     },
+    SOLANA: {
+        SOLANA_DEVNET_RPC_URL: 'https://api.devnet.solana.com/',
+        SOLANA_TESTNET_RPC_URL: 'https://api.testnet.solana.com/',
+        SOLANA_MAINNET_RPC_URL: 'https://api.mainnet-beta.solana.com'
+    },
     BITCOIN: {
         SAMPL_PRIVATE_KEY: 'Kwn5XLLKgSL7M6hosdQLjp8dEEWUudC4MRY2TTP2UkkQe71g5GCD',
         SAMPLE_ADDRESS: 'bc1qfgf0eukwjslus64vvcqt2l6t7e85hjp3e28lxp',
