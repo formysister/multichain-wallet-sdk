@@ -52,7 +52,7 @@
     "bluebird": "^3.7.2",
     "browserify-zlib": "^0.1.4",
     "bs58": "^5.0.0",
-    "buffer": "^4.9.1",
+    "buffer": "^6.0.3",
     "buffer-layout": "^1.2.2",
     "cardano-wallet": "^1.2.2",
     "cardano-wallet-js": "^1.4.0",
