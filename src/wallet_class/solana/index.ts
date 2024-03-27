@@ -398,8 +398,8 @@ class SolanaWallet {
             else {
                 return null
             }
-        } catch (err) {
-            throw err
+        } catch (error) {
+            throw error
         }
     }
 }
