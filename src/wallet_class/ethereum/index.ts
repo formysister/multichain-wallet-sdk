@@ -396,7 +396,6 @@ class EthereumWallet {
      * @returns {Promise<IsNFT>}
      */
     isNftContract = async (address: string): Promise<IsNFT> => {
-
         let isNFT: boolean
         let tokenType: ERCTokenType
 
