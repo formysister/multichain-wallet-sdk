@@ -262,7 +262,6 @@ class SolanaWallet {
     
             if (tokenAddress) {
                 // Get token mint
-    
                 const mint = await getMint(
                     this.provider,
                     new solanaWeb3.PublicKey(tokenAddress)
@@ -349,9 +348,9 @@ class SolanaWallet {
     /**
      * 
      * @param cluster 
-     * @returns {Promise<ISplTokenInfo[]>}
+     * @returns {Array<ISplTokenInfo>}
      */
-    getTokenList = async (cluster: 'mainnet-beta' | 'testnet' | 'devnet'): Promise<ISplTokenInfo[]> => {
+    getTokenList = async (cluster: 'mainnet-beta' | 'testnet' | 'devnet'): Promise<Array<ISplTokenInfo>> => {
         try {
             const response = await axios.get(SOLANA_TOKENLIST_URI)
             if (response.data && response.data.tokens) {
