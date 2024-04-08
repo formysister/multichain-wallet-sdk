@@ -3,35 +3,30 @@
 
 ### 📡Supported Network List
 - EVM based networks
-- Solana 
+- Solana
+- BNB Beacon Chain
 
 [Documentation](https://cybers-organization-5.gitbook.io/multichain-wallet-sdk-documentation)
 
 ### installation
 
 ```
-
 npm install multichain-wallet-sdk
-
 ```
 
 ### import example (es5)
 
 ```javascript
-
 const { EthereumWallet } =  require('multichain-wallet-sdk');
-
 ```
 
 ### import example (es6)
 
 ```javascript
-
 import { EthereumWallet } from  'multichain-wallet-sdk';
-
 ```
 
-### functions(ethereum)
+### functions(Ethereum)
 
 - Create wallet
 - Recover wallet from phrase words
@@ -53,7 +48,7 @@ import { EthereumWallet } from  'multichain-wallet-sdk';
 - Get latency of JSON RPC endpoint (util function)
 - GET latency of websocket endpoint (util function)
   
- ### functions(solana)
+### functions(Solana)
  - Create wallet
  - Recover wallet from mnemonic phrase
  - Get key pair from private key
@@ -66,6 +61,14 @@ import { EthereumWallet } from  'multichain-wallet-sdk';
  - Get transaction from hash (util function)
  - Get existing token list of network (util function)
  - Get token detail from token address (util function)
+
+### functions(BNB Beacon Chain)
+- Create wallet
+- Recover wallet from mnemonic phrase
+- Recover account from private key
+- Get BNB balance
+- Send BNB
+- Transfer tokens
 
 Contribute [here](https://github.com/formysister/multichain-wallet-sdk/fork).
 Submit issues [here](https://github.com/formysister/multichain-wallet-sdk/issues).
