@@ -1,3 +1,5 @@
+import type { Signer } from "ethers"
+
 // Evm Types
 
 export type Wallet = {
@@ -11,12 +13,14 @@ export type EvmWallet = {
     address: string,
     privateKey: string,
     mnemonic?: string,
-    nonce?: number
+    nonce?: number,
+    signer?: Signer
 }
 
 export type EvmAccount = {
     address: string,
-    privateKey: string
+    privateKey: string,
+    signer?: Signer
 }
 
 export type ERCTokenType = 'ERC20' | 'ERC721' | 'ERC1155' | undefined

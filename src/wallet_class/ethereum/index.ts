@@ -2,8 +2,6 @@
 
 // import core-packages
 import { BigNumberish, Contract, InterfaceAbi, ethers } from 'ethers';
-
-import { hdkey } from 'ethereumjs-wallet';
 import { mnemonicToSeed } from 'bip39';
 
 // import constants
@@ -65,14 +63,14 @@ class EthereumWallet {
      */
     createWallet = (nonce?: number): EvmWallet => {
         const index = nonce || Math.floor(Math.random() * 10);
-
-        const wallet = ethers.Wallet.createRandom();
+        const wallet = ethers.Wallet.createRandom().connect(this.provider);
 
         return {
             address: wallet.address,
             privateKey: wallet.privateKey,
             mnemonic: wallet.mnemonic?.phrase,
-            nonce: index
+            nonce: index,
+            signer: wallet
         }
     }
 
@@ -84,16 +82,15 @@ class EthereumWallet {
      * @returns {EvmWallet}
      */
     recoverWallet = (mnemonic: string, nonce?: number): EvmWallet => {
-
         const index = nonce || 0;
-
-        const wallet = ethers.Wallet.fromPhrase(mnemonic);
+        const wallet = ethers.Wallet.fromPhrase(mnemonic).connect(this.provider);
 
         return {
             address: wallet.address,
             privateKey: wallet.privateKey,
             mnemonic: wallet.mnemonic?.phrase,
-            nonce: index
+            nonce: index,
+            signer: wallet
         }
     }
 
@@ -116,18 +113,16 @@ class EthereumWallet {
      * 
      * @param rootSeed 
      * @param nonce 
-     * @returns {Promise<EvmAccount>}
+     * @returns {EvmAccount}
      */
-    createAccount = async (rootSeed: Buffer, nonce?: number): Promise<EvmAccount> => {
+    createAccount = (): EvmAccount => {
         try {
-            const hdWallet = await hdkey.fromMasterSeed(rootSeed);
-            const wallet = hdWallet.derivePath(ETHEREUM_DEFAULT + (nonce || 0)).getWallet();
-            const address = `0x${wallet.getAddress().toString('hex')}`
-            const privateKey = wallet.getPrivateKey().toString('hex')
+            const wallet = ethers.Wallet.createRandom().connect(this.provider)
 
             return {
-                address: address,
-                privateKey: privateKey
+                address: wallet.address,
+                privateKey: wallet.privateKey,
+                signer: wallet
             }
         }
         catch (error) {
@@ -141,11 +136,12 @@ class EthereumWallet {
      * @returns {EvmAccount}
      */
     importAccount = (privateKey: string): EvmAccount => {
-        const account = new ethers.Wallet(privateKey)
+        const account = new ethers.Wallet(privateKey).connect(this.provider)
 
         return {
             address: account.address,
-            privateKey: account.privateKey
+            privateKey: account.privateKey,
+            signer: account
         }
     }
 
