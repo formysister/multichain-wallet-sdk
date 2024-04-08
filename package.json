@@ -1,6 +1,6 @@
 {
   "name": "multichain-wallet-sdk",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -160,6 +160,7 @@
     "tls": false
   },
   "browser": {
+    "buffer": "buffer",
     "bip39": "./dist/lib/web-bip39",
     "zlib": "browserify-zlib",
     "console": "console-browserify",
