@@ -43,7 +43,7 @@ describe("Wallet Test", () => {
 
         it("createAccount()", async () => {
             const seed = await ethereumWallet.createMasterSeedFromMnemonic(SAMPLE_DATA.COMMON.MNEMONIC)
-            const account = await ethereumWallet.createAccount(seed, 0)
+            const account = await ethereumWallet.createAccount()
 
             expect(typeof account.privateKey).toBe('string')
             expect(typeof account.address).toBe('string')
@@ -51,7 +51,7 @@ describe("Wallet Test", () => {
 
         it("importAccount()", async () => {
             const seed = await ethereumWallet.createMasterSeedFromMnemonic(SAMPLE_DATA.COMMON.MNEMONIC)
-            const account = await ethereumWallet.createAccount(seed, 0)
+            const account = await ethereumWallet.createAccount()
             const importedAccount = ethereumWallet.importAccount(account.privateKey)
 
             expect(account.address.toLowerCase()).toStrictEqual(importedAccount.address.toLowerCase())
