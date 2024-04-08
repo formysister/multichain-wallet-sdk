@@ -1,5 +1,5 @@
 // import EthereumWallet from '../src/wallet_class/ethereum'
-import { EthereumWallet, SolanaWallet } from "../src"
+import { EthereumWallet, SolanaWallet, BinanceWallet } from "../src"
 import SAMPLE_DATA from './sample_data'
 
 jest.setTimeout(50000)
@@ -156,6 +156,38 @@ describe("Wallet Test", () => {
             const tokenDetail = await solanaWallet.getTokenInfo("mainnet-beta", "ETAtLmCmsoiEEKfNrHKJ2kYy3MoABhU6NQvpSfij5tDs")
 
             expect(typeof tokenDetail).toBe("object")
+        })
+    })
+
+    describe("BNB Beacon wallet test", () => {
+        let beaconWallet: BinanceWallet
+
+        beforeAll(() => {
+            beaconWallet = new BinanceWallet()
+        })
+
+        it("Create wallet", () => {
+            const wallet = beaconWallet.createWallet()
+
+            expect(typeof wallet).toBe("object")
+        })
+
+        it("Recover wallet", () => {
+            const wallet = beaconWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC)
+
+            expect(typeof wallet).toBe("object")
+        })
+
+        it("Import account", () => {
+            const account = beaconWallet.importAccount(SAMPLE_DATA.BEACON.SAMPLE_PRIVATE_KEY)
+
+            expect(typeof account).toBe("object")
+        })
+
+        it("Get balance", async () => {
+            const balance = await beaconWallet.getBalance(SAMPLE_DATA.BEACON.SAMPLE_SERVER_URL, "mainnet", SAMPLE_DATA.BEACON.SAMPLE_ADDRESS)
+        
+            expect(typeof balance).toBe("string")
         })
     })
 

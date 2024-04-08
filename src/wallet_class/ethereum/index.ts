@@ -8,7 +8,6 @@ import { mnemonicToSeed } from 'bip39';
 import {
     ERC721_INTERFACE_ID,
     ERC1155_INTERFACE_ID,
-    ETHEREUM_DEFAULT
 } from '../../constant';
 // import ABI
 import { erc20ABI, ecr721ABI, erc1155ABI } from '../../abi'

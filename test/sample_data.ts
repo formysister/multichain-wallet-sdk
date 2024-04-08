@@ -19,6 +19,11 @@ const SAMPLE_DATA = {
         SAMPLE_ADDRESS: 'bc1qfgf0eukwjslus64vvcqt2l6t7e85hjp3e28lxp',
         TESTNET_ADDRESS_P2PKH: 'mnGd3ZgszE3BJNH6sxVcvJhNRz3qnXQgS7',
         TESTNET_ADDRESS_BECH32: 'tb1qfgf0eukwjslus64vvcqt2l6t7e85hjp3nvuvaj'
+    },
+    BEACON: {
+        SAMPLE_PRIVATE_KEY: "ca9a92085b6ea19fbe6bc4c369c5652cc4f1a2f3c71280c5b863d372f300d063",
+        SAMPLE_ADDRESS: "bnb1z79qgmv2e9xm6p24f2el0a2evxzyvnsnps0mvx",
+        SAMPLE_SERVER_URL: "https://dex.binance.org/"
     }
 }
 
