@@ -1,5 +1,5 @@
 import EthereumWallet from "./ethereum"
 import SolanaWallet from "./solana"
-import BinanceWallet from "./binance"
+// import BinanceWallet from "./binance"
 
-export { EthereumWallet, SolanaWallet, BinanceWallet }
+export { EthereumWallet, SolanaWallet }

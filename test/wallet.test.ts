@@ -1,5 +1,5 @@
 // import EthereumWallet from '../src/wallet_class/ethereum'
-import { EthereumWallet, SolanaWallet, BinanceWallet } from "../src"
+import { EthereumWallet, SolanaWallet } from "../src"
 import SAMPLE_DATA from './sample_data'
 
 jest.setTimeout(50000)
@@ -159,37 +159,37 @@ describe("Wallet Test", () => {
         })
     })
 
-    describe("BNB Beacon wallet test", () => {
-        let beaconWallet: BinanceWallet
+    // describe("BNB Beacon wallet test", () => {
+    //     let beaconWallet: BinanceWallet
 
-        beforeAll(() => {
-            beaconWallet = new BinanceWallet()
-        })
+    //     beforeAll(() => {
+    //         beaconWallet = new BinanceWallet()
+    //     })
 
-        it("Create wallet", () => {
-            const wallet = beaconWallet.createWallet()
+    //     it("Create wallet", () => {
+    //         const wallet = beaconWallet.createWallet()
 
-            expect(typeof wallet).toBe("object")
-        })
+    //         expect(typeof wallet).toBe("object")
+    //     })
 
-        it("Recover wallet", () => {
-            const wallet = beaconWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC)
+    //     it("Recover wallet", () => {
+    //         const wallet = beaconWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC)
 
-            expect(typeof wallet).toBe("object")
-        })
+    //         expect(typeof wallet).toBe("object")
+    //     })
 
-        it("Import account", () => {
-            const account = beaconWallet.importAccount(SAMPLE_DATA.BEACON.SAMPLE_PRIVATE_KEY)
+    //     it("Import account", () => {
+    //         const account = beaconWallet.importAccount(SAMPLE_DATA.BEACON.SAMPLE_PRIVATE_KEY)
 
-            expect(typeof account).toBe("object")
-        })
+    //         expect(typeof account).toBe("object")
+    //     })
 
-        it("Get balance", async () => {
-            const balance = await beaconWallet.getBalance(SAMPLE_DATA.BEACON.SAMPLE_SERVER_URL, "mainnet", SAMPLE_DATA.BEACON.SAMPLE_ADDRESS)
+    //     it("Get balance", async () => {
+    //         const balance = await beaconWallet.getBalance(SAMPLE_DATA.BEACON.SAMPLE_SERVER_URL, "mainnet", SAMPLE_DATA.BEACON.SAMPLE_ADDRESS)
         
-            expect(typeof balance).toBe("string")
-        })
-    })
+    //         expect(typeof balance).toBe("string")
+    //     })
+    // })
 
     // describe("Bitcoin Wellet Test", () => {
     //     let bitcoinWallet: BitcoinWallet
