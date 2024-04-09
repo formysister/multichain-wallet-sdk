@@ -4,7 +4,7 @@
 ### 📡Supported Network List
 - EVM based networks
 - Solana
-- BNB Beacon Chain
+- BNB Beacon Chain (Temporarily disabled)
 
 [Documentation](https://cybers-organization-5.gitbook.io/multichain-wallet-sdk-documentation)
 
