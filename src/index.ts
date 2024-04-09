@@ -1,4 +1,4 @@
-import { EthereumWallet, SolanaWallet, BinanceWallet } from "./wallet_class"
+import { EthereumWallet, SolanaWallet } from "./wallet_class"
 
 // export = ({ EthereumWallet })
-export { EthereumWallet, SolanaWallet, BinanceWallet }
+export { EthereumWallet, SolanaWallet }
