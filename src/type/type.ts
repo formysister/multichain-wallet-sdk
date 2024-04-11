@@ -5,6 +5,7 @@ import type { Signer } from "ethers"
 export type Wallet = {
     address: string,
     privateKey: string,
+    seed?: string,
     mnemonic?: string,
     nonce?: number
 }
