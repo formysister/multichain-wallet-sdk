@@ -9,7 +9,7 @@ describe("Wallet Test", () => {
         let ethereumWallet: EthereumWallet;
 
         beforeAll(() => {
-            ethereumWallet = new EthereumWallet(SAMPLE_DATA.ETHEREUM.GOERLI_RPC)
+            ethereumWallet = new EthereumWallet(SAMPLE_DATA.ETHEREUM.SEPOLIA_RPC)
         })
 
         it("Check Initial wallet data", () => {
@@ -100,7 +100,7 @@ describe("Wallet Test", () => {
         })
 
         it("Util", async () => {
-            const latency = await ethereumWallet.util.getJsonRPCLatency('https://goerli.infura.io/v3/60d0fc034847460da68aa4501df5fe57')
+            const latency = await ethereumWallet.util.getJsonRPCLatency('https://sepolia.infura.io/v3/254f726a173649a896fe0d63ab2085b9')
             
             expect(typeof latency).toBe('number')
         })

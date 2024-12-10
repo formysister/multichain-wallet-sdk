@@ -3,11 +3,11 @@ const SAMPLE_DATA = {
         MNEMONIC: "gorilla ghost swing tourist deer wild purchase seek execute arrive office grow"
     },
     ETHEREUM: {
-        GOERLI_RPC: "https://goerli.infura.io/v3/60d0fc034847460da68aa4501df5fe57",
+        SEPOLIA_RPC: "https://sepolia.infura.io/v3/254f726a173649a896fe0d63ab2085b9",
         ZERO_ADDRESS: "0x0000000000000000000000000000000000000000",
-        SAMPLE_TOKEN_ADDRESS: "0xa8De46D005919aa6a8851C85E60f09884869c50a",
+        SAMPLE_TOKEN_ADDRESS: "0xaa8e23fb1079ea71e0a56f48a2aa51851d8433d0",
         SAMPLE_721_NFT_ADDRESS: "0x7EC3f3CE817F5A5CA3e285022573Df1b1B4DeF7d",
-        SAMPLE_1155_NFT_ADDRESS: "0xA8bf99a3aDA507bCD0a8ce8982d3d94a4896440B"
+        SAMPLE_1155_NFT_ADDRESS: "0x7EC3f3CE817F5A5CA3e285022573Df1b1B4DeF7d"
     },
     SOLANA: {
         SOLANA_DEVNET_RPC_URL: 'https://api.devnet.solana.com/',
