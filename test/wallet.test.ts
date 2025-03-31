@@ -114,27 +114,27 @@ describe("Wallet Test", () => {
             await solanaWallet.initialize()
         })
 
-        it("Create Wallet", async () => {
+        it("createWallet()", async () => {
             const wallet = await solanaWallet.createWallet()
             expect(typeof wallet).toBe("object")
         })
 
-        it("Recover Wallet", async () => {
+        it("recoverWallet()", async () => {
             const wallet = await solanaWallet.recoverWallet(SAMPLE_DATA.COMMON.MNEMONIC)
             expect(typeof wallet).toBe("object")
         })
 
-        it("Create Account", async () => {
+        it("createAccount()", async () => {
             const account = await solanaWallet.createAccount()            
             expect(typeof account.privateKey).toBe("string")
         })
 
-        it("Import Account", async () => {
+        it("importAccount()", async () => {
             const account = await solanaWallet.importAccount(solanaWallet.privateKey)            
             expect(account.address.toLowerCase()).toBe(solanaWallet.address.toLowerCase())
         })
 
-        it("Get Balance", async () => {
+        it("getBalance()", async () => {
             const solBalance = await solanaWallet.getBalance("9DSRMyr3EfxPzxZo9wMBPku7mvcazHTHfyjhcfw5yucA")
 
             const tokenBalance = await solanaWallet.getBalance(
@@ -146,13 +146,13 @@ describe("Wallet Test", () => {
             expect(typeof tokenBalance).toBe("number")
         })
 
-        it("Get token list", async () => {
+        it("getTokenList()", async () => {
             const tokenList = await solanaWallet.getTokenList("mainnet-beta")
             
             expect(typeof tokenList).toBe("object")
         })
 
-        it("Get token detail", async () => {
+        it("getTokenInfo()", async () => {
             const tokenDetail = await solanaWallet.getTokenInfo("mainnet-beta", "ETAtLmCmsoiEEKfNrHKJ2kYy3MoABhU6NQvpSfij5tDs")
 
             expect(typeof tokenDetail).toBe("object")
